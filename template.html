@@ -1,0 +1,699 @@
+<title>R53 Shift Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* One committed world: solder-mask green, silkscreen white, copper hairlines, and the LED sweep
+     as the only saturated thing on the page. Painted explicitly so it holds on any host ground. */
+  :root{
+    --bg:#0B1811; --bg2:#0F2017; --panel:#132A1F; --panel2:#183526; --ink:#08110C;
+    --line:rgba(216,148,89,.26); --line2:rgba(216,148,89,.5);
+    --copper:#D89459; --copper2:#B87A45;
+    --silk:#EEF3EC; --silk2:#C6D3C9; --mute:#8CA497;
+    --g:#2BF06A; --a:#FFB000; --r:#FF2E2E; --b:#3E8BFF;
+    --disp:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+    --body:'Schibsted Grotesk',system-ui,'Segoe UI',sans-serif;
+    --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+    --max:1240px; --gut:clamp(18px,4vw,48px);
+  }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}   /* the img{display:block} rule below would otherwise beat the UA's hidden */
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--silk);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  img{display:block;max-width:100%;height:auto}
+  h1,h2,h3{margin:0;font-family:var(--disp);font-weight:900;line-height:.92;letter-spacing:.005em;text-wrap:balance}
+  h2{font-size:clamp(44px,5.6vw,84px);text-transform:uppercase}
+  h3{font-size:clamp(26px,2.6vw,36px);text-transform:uppercase;font-weight:800;letter-spacing:.01em}
+  p{margin:0}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--copper);display:flex;align-items:center;gap:12px}
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--copper2)}
+  .lede{font-size:clamp(18px,1.5vw,21px);line-height:1.5;color:var(--silk2);max-width:34em}
+  .mono{font-family:var(--mono)}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gut)}
+  :focus-visible{outline:2px solid var(--a);outline-offset:3px}
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important} }
+
+  /* ---------- nav ---------- */
+  .nav{position:sticky;top:0;z-index:20;background:rgba(11,24,17,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav .wrap{display:flex;align-items:center;gap:28px;height:60px}
+  .mark{font-family:var(--disp);font-weight:900;font-size:24px;letter-spacing:.04em;text-decoration:none;display:flex;align-items:center;gap:10px}
+  .mark i{display:inline-grid;grid-template-columns:repeat(4,4px);gap:2px}
+  .mark i b{width:4px;height:10px;background:var(--g)} .mark i b:nth-child(3){background:var(--a)} .mark i b:nth-child(4){background:var(--r)}
+  .nav nav{display:flex;gap:22px;margin-left:auto;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .nav nav a{text-decoration:none;color:var(--silk2)} .nav nav a:hover{color:var(--silk)}
+  .btn{display:inline-flex;align-items:center;gap:10px;padding:13px 20px;border-radius:4px;font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid transparent;cursor:pointer;white-space:nowrap}
+  .btn.solid{background:var(--silk);color:var(--ink)} .btn.solid:hover{background:#fff}
+  .btn.ghost{border-color:var(--line2);color:var(--silk)} .btn.ghost:hover{background:rgba(216,148,89,.1)}
+  .btn.sm{padding:9px 14px;font-size:12px}
+  @media (max-width:820px){ .nav nav{display:none} }
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px;align-items:center;min-height:min(78vh,720px);padding-top:40px;padding-bottom:40px}
+  .hero h1{font-size:clamp(64px,8.6vw,136px);text-transform:uppercase}
+  .hero h1 em{font-style:normal;color:var(--copper)}
+  .hero .copy{display:grid;gap:22px;max-width:560px}
+  .hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .stage{position:relative;aspect-ratio:7/5;min-height:340px}
+  .stage canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;touch-action:none}
+  .stage .fallback{position:absolute;inset:0;object-fit:contain;opacity:.9}
+  .stage .hint{position:absolute;left:0;bottom:0;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .tach{position:absolute;right:0;top:0;text-align:right;pointer-events:none}
+  .tach .rpm{font-family:var(--disp);font-weight:900;font-size:clamp(56px,7vw,104px);line-height:.85;font-variant-numeric:tabular-nums;color:var(--silk)}
+  .tach .unit{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--mute);margin-top:6px}
+  .tach .gear{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--copper);margin-top:2px}
+  .bar{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;width:min(100%,330px)}
+  .bar i{height:18px;border-radius:2px;background:#1c2b23;border:1px solid rgba(255,255,255,.05);transition:background .06s linear,box-shadow .06s linear}
+  .decode{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--mute);line-height:1.8}
+  .decode b{color:var(--silk2);font-weight:500}
+  @media (max-width:900px){ .hero .wrap{grid-template-columns:1fr;min-height:0} .tach{position:static;text-align:left;margin-top:8px} }
+
+  /* ---------- ladder ---------- */
+  .ladder{border-bottom:1px solid var(--line);background:var(--bg2)}
+  .ladder .wrap{padding-top:28px;padding-bottom:28px}
+  .ladder ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .ladder li{background:var(--bg2);padding:18px 18px 16px;display:grid;gap:8px;align-content:start;text-decoration:none;position:relative}
+  .ladder li a{text-decoration:none;display:contents}
+  .ladder li .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper)}
+  .ladder li .t{font-family:var(--disp);font-weight:800;font-size:26px;text-transform:uppercase;line-height:.95}
+  .ladder li .p{font-size:14px;color:var(--mute)}
+  .ladder li .step{position:absolute;left:0;bottom:0;height:3px;background:linear-gradient(90deg,var(--g),var(--a),var(--r))}
+  .ladder li:nth-child(1) .step{width:20%} .ladder li:nth-child(2) .step{width:40%} .ladder li:nth-child(3) .step{width:60%} .ladder li:nth-child(4) .step{width:80%} .ladder li:nth-child(5) .step{width:100%}
+  @media (max-width:900px){ .ladder ol{grid-template-columns:repeat(2,1fr)} .ladder li:last-child{grid-column:1/-1} }
+
+  /* ---------- sections ---------- */
+  section.block{padding:clamp(64px,9vw,120px) 0;border-bottom:1px solid var(--line)}
+  .head{display:grid;gap:18px;max-width:760px;margin-bottom:clamp(32px,4vw,56px)}
+  .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,72px);align-items:center}
+  .split.rev>*:first-child{order:2}
+  @media (max-width:900px){ .split{grid-template-columns:1fr} .split.rev>*:first-child{order:0} }
+  .frame{position:relative;border:1px solid var(--line);background:var(--panel);padding:10px}
+  .frame figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:12px 4px 2px;display:flex;justify-content:space-between;gap:12px}
+  .frame img{width:100%}
+  .spec{display:grid;grid-template-columns:max-content 1fr;gap:10px 22px;font-family:var(--mono);font-size:13px;line-height:1.5;margin:0}
+  .spec dt{color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-size:11px;padding-top:3px}
+  .spec dd{margin:0;color:var(--silk2);font-variant-numeric:tabular-nums}
+  .spec dd b{color:var(--silk);font-weight:500}
+  .rule{height:1px;background:var(--line);margin:22px 0}
+  .list{display:grid;gap:14px;padding:0;margin:0;list-style:none}
+  .list li{position:relative;padding-left:28px;color:var(--silk2)}
+  .list li::before{content:"";position:absolute;left:0;top:9px;width:8px;height:8px;background:var(--copper);border-radius:1px}
+  .list li b{color:var(--silk);font-weight:600}
+  .silk{font-family:var(--mono);font-size:12px;letter-spacing:.12em;color:var(--silk);background:var(--panel2);border:1px solid var(--line);padding:10px 14px;display:inline-flex;gap:18px;flex-wrap:wrap}
+  .silk span{color:var(--mute)}
+  .price{font-family:var(--disp);font-weight:900;font-size:44px;line-height:1;font-variant-numeric:tabular-nums}
+  .price small{font-family:var(--mono);font-size:12px;font-weight:400;letter-spacing:.14em;color:var(--mute);margin-left:8px;text-transform:uppercase}
+  .buyrow{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:8px}
+
+  /* board viewer */
+  .viewer{position:relative;aspect-ratio:4/3;background:radial-gradient(60% 60% at 50% 45%,#1a3a2a 0%,var(--panel) 70%);border:1px solid var(--line);overflow:hidden}
+  .viewer canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block;touch-action:none}
+  .viewer img.fallback{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:8%}
+  .viewer .tag{position:absolute;left:14px;top:12px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--silk2);background:rgba(8,17,12,.6);padding:6px 10px;border:1px solid var(--line)}
+  .viewer .hint{position:absolute;right:14px;bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .viewer .loading{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .viewer .loading.off{display:none}
+
+  /* phones */
+  .phones{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .phone{border:1px solid var(--line);background:#000;border-radius:18px;padding:8px;overflow:hidden}
+  .phone img{border-radius:12px;width:100%}
+  .phone p{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);padding:12px 6px 6px}
+  @media (max-width:900px){ .phones{grid-template-columns:repeat(2,1fr)} }
+  .qr{display:flex;align-items:center;gap:12px;text-decoration:none;border:1px solid var(--line);background:#fff;padding:8px 14px 8px 8px;border-radius:4px;color:var(--ink);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;line-height:1.5}
+  .qr img{width:96px;height:96px;image-rendering:pixelated}
+  .apply{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+  .apply div{background:var(--panel);padding:20px}
+  .apply .k{font-family:var(--disp);font-weight:900;font-size:30px;text-transform:uppercase}
+  .apply p{color:var(--silk2);font-size:15px;margin-top:6px}
+  @media (max-width:640px){ .apply{grid-template-columns:1fr} }
+
+  /* gallery */
+  .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .gallery .frame{display:flex;flex-direction:column}
+  .gallery .frame img{aspect-ratio:4/5;object-fit:cover;width:100%}
+  .gallery .frame img.contain{object-fit:contain}
+  @media (max-width:900px){ .gallery{grid-template-columns:1fr 1fr} } @media (max-width:560px){ .gallery{grid-template-columns:1fr} }
+
+  /* pins */
+  .pins{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13px}
+  .pins th,.pins td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line)}
+  .pins th{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);font-weight:500}
+  .pins td:first-child{color:var(--silk);font-variant-numeric:tabular-nums}
+  .sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:8px;border:1px solid rgba(255,255,255,.15)}
+
+  /* logger */
+  .tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+  .tiers div{background:var(--panel);padding:20px;display:grid;gap:8px;align-content:start}
+  .tiers .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper)}
+  .tiers .t{font-family:var(--disp);font-weight:900;font-size:28px;text-transform:uppercase;line-height:.95}
+  .tiers p{font-size:14px;color:var(--silk2)}
+  @media (max-width:760px){ .tiers{grid-template-columns:1fr} }
+
+  /* pricing */
+  .pricing{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);align-items:end}
+  .pricing article{background:var(--bg2);padding:22px 20px 20px;display:grid;gap:10px;align-content:end}
+  .pricing article:nth-child(1){min-height:300px}.pricing article:nth-child(2){min-height:340px}.pricing article:nth-child(3){min-height:380px}.pricing article:nth-child(4){min-height:420px}.pricing article:nth-child(5){min-height:460px}
+  .pricing .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--copper)}
+  .pricing .t{font-family:var(--disp);font-weight:900;font-size:30px;text-transform:uppercase;line-height:.95}
+  .pricing ul{margin:0;padding:0;list-style:none;display:grid;gap:6px;font-size:14px;color:var(--silk2)}
+  .pricing ul li::before{content:"+ ";color:var(--copper);font-family:var(--mono)}
+  .pricing ul li.base::before{content:""}
+  .pricing .price{font-size:38px;margin-top:6px}
+  .pricing article.hot{background:var(--panel2);outline:1px solid var(--copper2);outline-offset:-1px}
+  .pricing .btn{justify-content:center}
+  @media (max-width:1000px){ .pricing{grid-template-columns:repeat(2,1fr)} .pricing article{min-height:0!important} .pricing article:last-child{grid-column:1/-1} }
+  @media (max-width:560px){ .pricing{grid-template-columns:1fr} }
+  .note{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.04em;margin-top:16px}
+
+  /* fit + faq */
+  .fit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+  .fit div{background:var(--panel);padding:22px}
+  .fit .n{font-family:var(--disp);font-weight:900;font-size:40px;line-height:.9;color:var(--silk)}
+  .fit p{font-size:14px;color:var(--silk2);margin-top:8px}
+  @media (max-width:760px){ .fit{grid-template-columns:1fr} }
+  details{border-top:1px solid var(--line);padding:18px 0}
+  details:last-of-type{border-bottom:1px solid var(--line)}
+  summary{cursor:pointer;font-family:var(--disp);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.01em;list-style:none;display:flex;justify-content:space-between;gap:20px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-family:var(--mono);color:var(--copper);font-weight:400}
+  details[open] summary::after{content:"−"}
+  details p{color:var(--silk2);margin-top:12px;max-width:62em}
+
+  /* footer */
+  footer{padding:48px 0 64px;color:var(--mute);font-size:14px}
+  footer .wrap{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end}
+  footer .links{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  footer .links a{text-decoration:none;color:var(--silk2)}
+  footer .links a:hover{color:var(--silk)}
+  @media (max-width:760px){ footer .wrap{grid-template-columns:1fr} }
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="mark" href="#top"><i><b></b><b></b><b></b><b></b></i>RYAN RACING</a>
+    <nav>
+      <a href="#housing">Housing</a><a href="#light">Shift light</a><a href="#app">App</a><a href="#logger">Logger</a><a href="#bridge">Bridge</a><a href="#pricing">Pricing</a>
+    </nav>
+    <a class="btn solid sm" href="#pricing">Order</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <div class="copy">
+      <p class="eyebrow">CAN bus shift light · MINI Cooper S R53 · 2002–06</p>
+      <h1>Eyes up.<br>The bar<br><em>tells you.</em></h1>
+      <p class="lede">Eight LEDs on the column shroud, dead centre in your sightline, fed by the engine's own CAN bus. No tach signal to run, no phone required. Three seconds after the RPM frames stop, it goes dark instead of lying.</p>
+      <div class="ctas">
+        <a class="btn solid" href="#pricing">Order the shift light</a>
+        <a class="btn ghost" href="#app">Get the free app</a>
+      </div>
+      <div class="bar" id="mimic" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <p class="decode"><b>CAN 0x316</b> · bytes 2–3 · ÷ 6.4 · <b>100 frames/s</b><br>start <b>3500</b> · colour shift <b>6000</b> · redline <b>7100</b> · blink <b>200 ms</b></p>
+    </div>
+    <div class="stage" id="stage">
+      <canvas id="hero3d"></canvas>
+      <img class="fallback" id="heroFallback" hidden alt="The 3D-printed housing, rendered" src="{{ASSET:installed}}">
+      <div class="tach"><div class="rpm" id="rpmOut">2600</div><div class="unit">RPM · simulated pull</div><div class="gear" id="gearOut">2ND</div></div>
+      <div class="hint">Drag to turn the housing · live from the STL</div>
+    </div>
+  </div>
+</section>
+
+<section class="ladder" aria-label="The range">
+  <div class="wrap">
+    <ol>
+      <li><a href="#housing"><span class="k">Print it</span><span class="t">Housing</span><span class="p">The printed shroud on its own, for the open-source build.</span></a><span class="step"></span></li>
+      <li><a href="#light"><span class="k">Bolt it in</span><span class="t">Shift light</span><span class="p">Carrier board, module, strip and housing, assembled and tested.</span></a><span class="step"></span></li>
+      <li><a href="#app"><span class="k">Free</span><span class="t">Companion app</span><span class="p">Android and iPhone. Thresholds, colours, a live CAN monitor.</span></a><span class="step"></span></li>
+      <li><a href="#logger"><span class="k">Want more</span><span class="t">Logger · Flasher</span><span class="p">Log, analyse and flash the EMS2000. Three Play unlocks. Runs on a K+DCAN cable; runs better on the bridge.</span></a><span class="step"></span></li>
+      <li><a href="#bridge"><span class="k">Top of the range</span><span class="t">K-line + CAN bridge</span><span class="p">Reads the ECU, watches the bus, runs the light. One board, one OBD2 plug.</span></a><span class="step"></span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ HOUSING ============ -->
+<section class="block" id="housing">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">01 · The housing</p>
+      <h2>Clips to the column shroud. Moves with the wheel.</h2>
+      <p class="lede">Directly under the tach pod, so the flashing bar and the needle land in the same glance. The shroud shades the LEDs enough to kill windscreen reflections, and because it rides on the column, the wheel rim never blocks it.</p>
+    </div>
+    <div class="split">
+      <figure class="frame">
+        <img src="{{ASSET:installed}}" alt="The printed housing clipped to the column shroud, directly below the tach pod, in a red R53 interior">
+        <figcaption><span>Installed · under the tach pod</span><span>R53 · column shroud</span></figcaption>
+      </figure>
+      <div>
+        <dl class="spec">
+          <dt>Outer</dt><dd><b>105.1 × 23.3 × 54.9 mm</b></dd>
+          <dt>Windows</dt><dd>8 slots in the top face · <b>6.64 mm pitch</b> · 5.75 mm wide</dd>
+          <dt>Fits</dt><dd>8 × WS2812B stick (the common 8-LED bar)</dd>
+          <dt>Mount</dt><dd>clips over the column shroud under the tach pod, no drilling</dd>
+          <dt>File</dt><dd>the same STL we print from, on Cults3D</dd>
+        </dl>
+        <div class="rule"></div>
+        <ul class="list">
+          <li><b>Buy it printed</b> if you are building the open-source light yourself and just want the part in your hand.</li>
+          <li><b>Print it yourself</b> from the STL on Cults3D. Same file we print from.</li>
+        </ul>
+        <div class="buyrow">
+          <span class="price">$19<small>housing only</small></span>
+          <a class="btn solid" href="#pricing">Add to order</a>
+          <a class="btn ghost" href="https://cults3d.com/en/3d-model/various/r53-shift-light-housing" target="_blank" rel="noopener">STL on Cults3D</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASSEMBLED LIGHT ============ -->
+<section class="block" id="light">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">02 · The shift light, assembled</p>
+      <h2>One board instead of a knot of jumper wires.</h2>
+      <p class="lede">The carrier replaces a dev board, a CAN breakout, a USB buck module and the harness between them, every joint of which is a thing that vibrates loose in a car. Twelve volts in on a screw terminal; the strip and the bus on two more.</p>
+    </div>
+    <div class="split">
+      <div class="viewer" id="boardViewer">
+        <canvas id="board3d"></canvas>
+        <img class="fallback" id="boardFallback" hidden alt="Isometric render of the carrier board" src="{{ASSET:sl_iso}}">
+        <span class="tag">Carrier · rev A · 54 × 48 mm · 4 layer</span>
+        <span class="hint">Drag to turn · scroll to zoom</span>
+        <div class="loading" id="boardLoading">Loading the board from KiCad…</div>
+      </div>
+      <div>
+        <div class="silk"><span>J1</span>+12V GND <span>J2</span>CANH CANL <span>J3</span>+5V DATA GND</div>
+        <p class="decode" style="margin-top:10px">Every terminal pin is labelled above the pin it belongs to. You wire one of these upside down under a dash with a torch in your teeth.</p>
+        <div class="rule"></div>
+        <dl class="spec">
+          <dt>Power</dt><dd>12 V screw terminal · fused · TVS-clamped · reverse-blocked · <b>R-78E5.0</b> switching regulator</dd>
+          <dt>CAN</dt><dd><b>SN65HVD230</b> on the board with bus clamps · listen-only, never ACKs · termination jumper ships open</dd>
+          <dt>Strip drive</dt><dd><b>74AHCT1G125</b> level shifter and 330 Ω, not the ESP32 pin bare</dd>
+          <dt>Brain</dt><dd><b>ESP32-C3 SuperMini</b>, soldered flat, USB-C overhanging the top edge</dd>
+          <dt>RPM</dt><dd>CAN id 0x316, bytes 2–3, ÷ 6.4 · a 2 s silence blanks the bar</dd>
+          <dt>Mount</dt><dd>M3 at the four corners</dd>
+        </dl>
+        <div class="rule"></div>
+        <div class="buyrow">
+          <span class="price">$125<small>light + housing · tested</small></span>
+          <a class="btn solid" href="#pricing">Add to order</a>
+        </div>
+      </div>
+    </div>
+    <div class="gallery" style="margin-top:36px">
+      <figure class="frame"><img class="contain" src="{{ASSET:sl_top}}" alt="Top of the carrier board: regulator, SuperMini footprint, CAN transceiver and three screw terminals"><figcaption><span>Top · from the KiCad file</span><span>rev A</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:bench}}" alt="The first prototype on the bench: an 8-LED WS2812B stick wired to an ESP32-S3-Zero with a screw-terminal CAN breakout"><figcaption><span>Where it started · bench prototype</span><span>2026-07</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:wirerun}}" alt="Running the wire up the A-pillar behind the trim, with the dash side panel off"><figcaption><span>Install · the wire run</span><span>A-pillar</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APP ============ -->
+<section class="block" id="app">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">03 · The companion app · free</p>
+      <h2>Set the redline while watching the redline.</h2>
+      <p class="lede">The strip along the top of the screen is the real one, mirrored at 10 Hz from live RPM. Drag the redline down to 6,800 and the bar fills sooner, right there, before you have moved the car. Nothing on the Bluetooth side sits between the CAN bus and the LEDs.</p>
+    </div>
+    <div class="phones">
+      <div class="phone"><img src="{{ASSET:app_thr}}" alt="Shift light screen: 5300 rpm, the mimic bar, and sliders for LEDs start, colour shift, redline and blink"><p>Thresholds · live mimic</p></div>
+      <div class="phone"><img src="{{ASSET:app_strip}}" alt="Strip settings: colours, brightness, LED count and fill direction"><p>Colours · fill · brightness</p></div>
+      <div class="phone"><img src="{{ASSET:app_graph}}" alt="Graph screen plotting RPM off the bus over time"><p>Graph · RPM off the bus</p></div>
+      <div class="phone"><img src="{{ASSET:app_can}}" alt="CAN bus monitor listing every id with its rate and latest bytes"><p>CAN monitor · every id</p></div>
+    </div>
+    <div class="apply">
+      <div><div class="k">Apply</div><p>Writes to RAM. The strip changes now; the change is gone at the next power cycle. Dragging a slider does not burn a flash write per frame.</p></div>
+      <div><div class="k">Save</div><p>Commits what the board is running to flash. The board reports when the two differ, including first boot on a blank board, so your first edit is never lost.</p></div>
+    </div>
+    <div class="buyrow" style="margin-top:28px;align-items:stretch">
+      <a class="qr" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener" aria-label="Scan to get the Android app"><img src="{{ASSET:app_qr}}" alt="QR code for the Android APK" width="96" height="96"><span>Scan for<br>the APK</span></a>
+      <div style="display:grid;gap:10px;align-content:center">
+        <div class="ctas"><a class="btn solid" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener">Android · get the APK</a>
+        <a class="btn ghost" href="https://logs.geekopolis.com/shiftlight/" target="_blank" rel="noopener">iPhone · open in Bluefy</a></div>
+        <span class="decode">Version 1.1 · Android 8.0 or newer · about 1 MB · one permission (Nearby devices), no internet permission at all.</span>
+      </div>
+    </div>
+    <p class="note">iPhone: Safari has never shipped Web Bluetooth, so the app runs in <b>Bluefy</b>, a free browser that bridges it. Same board, same screens, nothing to install from the App Store.</p>
+  </div>
+</section>
+
+<!-- ============ LOGGER / FLASHER ============ -->
+<section class="block" id="logger">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">04 · For those who want more · R53 Logger · Flasher</p>
+      <h2>Log it. Read the surface. Flash it.</h2>
+      <p class="lede">An Android app that pulls engine telemetry straight from ECU RAM over K-line, fuses it with wideband AFR from the bridge into one time-aligned log, and then writes the calibration changes you decide on back to the EMS2000. Three one-time unlocks on Google Play: the app, the tune options, and the factory software.</p>
+    </div>
+    <div class="phones">
+      <div class="phone"><img src="{{ASSET:log_afr3d}}" alt="AFR 3D surface over RPM and load, with the current sample marked"><p>AFR surface · rpm × load</p></div>
+      <div class="phone"><img src="{{ASSET:log_live}}" alt="Live line graph of a pull: RPM, throttle, knock energy, spark advance, trims and AFR"><p>Live graph · a pull</p></div>
+      <div class="phone"><img src="{{ASSET:log_flash}}" alt="Flash options screen with pedal map and fan toggles"><p>Flash options · pedal · fan</p></div>
+      <div class="phone"><img src="{{ASSET:log_garage}}" alt="Garage screen choosing which car a log belongs to"><p>Garage · per-car bins and logs</p></div>
+    </div>
+    <div class="tiers">
+      <div><div class="k">Unlock 1 · the base</div><div class="t">App</div><p>Logging, diagnostics and the 512 KB ECU backup read. Live graph, DTCs with cause and fix, autolog on wide-open throttle, AFR surface, fuel, trims and knock maps, CSV and Datazap export.</p></div>
+      <div><div class="k">Unlock 2 · add-on</div><div class="t">Flash</div><p>The tune options: pops, injector size, redline, pedal map, idle RPM, cooling-fan kick-on. Checksum recomputed before every write.</p></div>
+      <div><div class="k">Unlock 3 · add-on</div><div class="t">Factory software</div><p>Bundled US S, JCW and GP1 images as flash bases. Put a car back to stock, or start a tune from a different factory map.</p></div>
+    </div>
+    <p class="decode" style="margin-top:14px">ECU write needs the App unlock plus either add-on. Flash write needs the facelift silver-cover ECU; logging works on the other boxes. Reads and writes are done key on, engine off, on a battery charger.</p>
+    <div class="buyrow" style="margin-top:28px">
+      <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener" aria-label="Get it on Google Play"><img src="{{ASSET:play_badge}}" alt="Get it on Google Play" style="height:56px;width:auto"></a>
+      <span class="price">3<small>one-time unlocks · priced on Google Play</small></span>
+      <span class="decode">Works with a K+DCAN USB cable and USB-C OTG. Works better with the bridge: wideband AFR, CAN channels and the shift light in one log.</span>
+    </div>
+    <p class="note">Off-road and competition use. An ECU flash can brick a car; the app backs up the stock BIN first and refuses to write on a shared wire. <b>R53 Coding</b>, the module-coding companion, is a separate app with its own unlock.</p>
+  </div>
+</section>
+
+<!-- ============ BRIDGE ============ -->
+<section class="block" id="bridge">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">05 · Top of the range · K-line + CAN bridge</p>
+      <h2>The shift light grew a second job. Then a third.</h2>
+      <p class="lede">One board in the footwell that reads the Siemens EMS2000 over K-line, listens to the CAN bus, and drives the shift light. It plugs into the OBD2 socket and ships raw ECU blocks to your phone over Bluetooth, where the logger does the decoding. It is the best input the logger can have: wideband, CAN channels and the shift light, all in the same time-aligned log.</p>
+    </div>
+    <div class="split rev">
+      <div>
+        <ul class="list">
+          <li><b>K-line, properly.</b> An ST L9637D transceiver behind a 1 kΩ 1 W pull-up and a 1.5KE27A clamp. DS2 at 9600 baud, 8E1, the ECU's native dialect.</li>
+          <li><b>CAN, listen-only.</b> RPM, throttle, coolant and road speed off the car's bus, plus AEMnet lambda from a wideband gauge on the same pair. It never ACKs, so it cannot disturb the bus.</li>
+          <li><b>The shift light, still.</b> Same eight LEDs, straight off CAN RPM. Works with no phone connected and no app running.</li>
+          <li><b>XIAO ESP32-S3.</b> 8 MB flash, 8 MB PSRAM, BLE to the phone.</li>
+        </ul>
+        <div class="rule"></div>
+        <table class="pins">
+          <thead><tr><th>OBD2 pin</th><th>Wire</th><th>Signal</th></tr></thead>
+          <tbody>
+            <tr><td>4</td><td><i class="sw" style="background:#f07a1a"></i>orange</td><td>chassis ground</td></tr>
+            <tr><td>5</td><td><i class="sw" style="background:#7fc6ff"></i>light blue</td><td>signal ground</td></tr>
+            <tr><td>6</td><td><i class="sw" style="background:#2ca24a"></i>green</td><td>CAN H</td></tr>
+            <tr><td>7</td><td><i class="sw" style="background:#111"></i>black</td><td>K-line</td></tr>
+            <tr><td>14</td><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#eee 50%)"></i>green / white</td><td>CAN L</td></tr>
+            <tr><td>16</td><td><i class="sw" style="background:#d81e1e"></i>red</td><td>battery +12 V</td></tr>
+          </tbody>
+        </table>
+        <div class="buyrow" style="margin-top:22px">
+          <span class="price">$189<small>bridge · OBD2 pigtail</small></span>
+          <a class="btn solid" href="#pricing">Add to order</a>
+          <a class="btn ghost" href="https://github.com/MrBlahhhh/R53_Mini_Kline_Canbus_Logger_Shiftlight" target="_blank" rel="noopener">Hardware on GitHub</a>
+        </div>
+      </div>
+      <div style="display:grid;gap:18px">
+        <figure class="frame"><img src="{{ASSET:bridge_3d}}" alt="Isometric render of the K-line and CAN bridge carrier: XIAO ESP32-S3 sockets, L9637D, CAN transceiver, test points and the six-way harness header"><figcaption><span>Bridge carrier · from the KiCad file</span><span>RyanRacing silk</span></figcaption></figure>
+        <figure class="frame"><img src="{{ASSET:bridge_pict}}" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section class="block" id="pricing">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Order</p>
+      <h2>Start where you are.</h2>
+      <p class="lede">The housing fits the assembled light. The logger runs on a K+DCAN cable and runs best on the bridge, which includes the light. The bridge is the top of the range.</p>
+    </div>
+    <div class="pricing">
+      <article>
+        <div class="k">Print it</div><div class="t">Housing</div>
+        <ul><li class="base">Printed shroud, matte black</li><li class="base">Fits the 8-LED stick, 6.64 mm pitch</li></ul>
+        <div class="price">$19</div>
+        <a class="btn ghost" href="#">Add</a>
+      </article>
+      <article>
+        <div class="k">Bolt it in</div><div class="t">Shift light</div>
+        <ul><li class="base">Housing</li><li>Carrier rev A, assembled</li><li>ESP32-C3, firmware loaded</li><li>8-LED strip, 12 V harness</li></ul>
+        <div class="price">$125</div>
+        <a class="btn ghost" href="#">Add</a>
+      </article>
+      <article>
+        <div class="k">Free</div><div class="t">App</div>
+        <ul><li class="base">Android APK</li><li class="base">iPhone via Bluefy</li><li class="base">Thresholds, colours, CAN monitor</li></ul>
+        <div class="price">$0</div>
+        <a class="btn ghost" href="#app">Get it</a>
+      </article>
+      <article>
+        <div class="k">Want more</div><div class="t">Logger · Flasher</div>
+        <ul><li class="base">K+DCAN cable or the bridge</li><li>App unlock: log, diagnose, back up</li><li>Flash unlock: tune options</li><li>Factory software: US S, JCW, GP1</li></ul>
+        <div class="price">Play<small>three one-time unlocks</small></div>
+        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Google Play</a>
+      </article>
+      <article class="hot">
+        <div class="k">Top of the range</div><div class="t">Bridge</div>
+        <ul><li class="base">Shift light</li><li>K-line transceiver</li><li>CAN listen-only</li><li>OBD2 pigtail, wired</li><li>The logger's best input</li></ul>
+        <div class="price">$189</div>
+        <a class="btn solid" href="#">Add</a>
+      </article>
+    </div>
+    <p class="note">Shift light $125 confirmed. Housing and bridge prices are placeholders; the logger unlocks are priced on Google Play. Shipping and lead time to be confirmed.</p>
+  </div>
+</section>
+
+<!-- ============ FIT + FAQ ============ -->
+<section class="block">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">Fitment</p>
+      <h2>Built on one car. Ours.</h2>
+    </div>
+    <div class="fit">
+      <div><div class="n">2002–06</div><p>First-generation MINI Cooper S, chassis R53, the supercharged one. Siemens EMS2000 ECU.</p></div>
+      <div><div class="n">0x316</div><p>The CAN id the RPM rides on. The id and the divisor are settings, so a different car is a config change, not a rebuild.</p></div>
+      <div><div class="n">6 of 16</div><p>OBD2 pins the bridge uses. CAN is run to pins 6 and 14 so the socket is the single service point.</p></div>
+    </div>
+    <div style="margin-top:40px">
+      <details><summary>Does the light work without the phone?</summary><p>Yes. The strip runs from CAN with no phone and no app. The app only configures and observes. Thresholds saved to the board survive power-off.</p></details>
+      <details><summary>Will it upset the car's CAN bus?</summary><p>No. The node is configured listen-only and never drives a dominant bit, so it cannot acknowledge or disturb the bus. The 120 Ω termination jumper ships open because a vehicle bus is already terminated at both ends.</p></details>
+      <details><summary>Why is the iPhone app a web page?</summary><p>Because Safari has never had Web Bluetooth and every iOS browser has to use Safari's engine. Bluefy bridges it. The web app is the same three screens as Android and is free.</p></details>
+      <details><summary>Is the flashing safe?</summary><p>It is a flash tool for a twenty-year-old ECU, so treat it that way. The app reads and backs up the stock BIN before any write, recomputes the checksum, and refuses to write if anything else is on the K-line. Off-road and competition use only.</p></details>
+      <details><summary>Not AWS Route 53?</summary><p>Not AWS Route 53. R53 is the chassis code.</p></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="mark" href="#top" style="margin-bottom:14px"><i><b></b><b></b><b></b><b></b></i>RYAN RACING</a>
+      <p>Ryan 3D Printing and Design · the R53 tools by Geekopolis. Hardware and firmware are open source; the apps are not.</p>
+    </div>
+    <div class="links">
+      <a href="https://github.com/MrBlahhhh/esp32-shift-light-R53-mini" target="_blank" rel="noopener">Shift light</a>
+      <a href="https://github.com/MrBlahhhh/R53_Mini_Kline_Canbus_Logger_Shiftlight" target="_blank" rel="noopener">Bridge</a>
+      <a href="https://mrblahhhh.github.io/" target="_blank" rel="noopener">Blog</a>
+      <a href="https://mrblahhhh.github.io/r53-esp32/privacy.html" target="_blank" rel="noopener">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script id="stlData" type="text/plain">{{ASSET:stl}}</script>
+<script id="glbData" type="text/plain">{{ASSET:glb}}</script>
+<script>
+(function(){
+  'use strict';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The preview build carries the models inline as base64; the hosted build fetches files.
+  const ASSETS = {{ASSET:manifest}};
+  function loadSTL(cb, err){
+    if (ASSETS.inline) { try { cb(new THREE.STLLoader().parse(b64buf('stlData'))); } catch(e){ err(e); } }
+    else new THREE.STLLoader().load(ASSETS.stl, cb, undefined, err);
+  }
+  function loadGLB(cb, err){
+    if (ASSETS.inline) new THREE.GLTFLoader().parse(b64buf('glbData'), '', cb, err);
+    else new THREE.GLTFLoader().load(ASSETS.glb, cb, undefined, err);
+  }
+
+  /* ---------- the firmware's bar logic (shiftlightRender in shiftlight.cpp), mirrored ----------
+     Mirrored strip: a "slot" is a pair lit from both ends inward, so 8 LEDs are 4 slots.
+     level = 1 + (rpm - start) * (slots - 1) / (redline - start), capped at slots.
+     Colour is colorLow flat below rpmMid, then a blend colorMid -> colorHigh up to redline.
+     Above rpmBlink every LED shows colorBlink, toggling every half period off the clock. */
+  const CFG = { start:3500, mid:6000, red:7100, blink:7100, period:200, n:8 };
+  // settingsDefaults(): low and mid are the same green, high and blink the same red
+  const LOW=[0,255,0], MID=[0,255,0], HIGH=[255,0,0], BLINK=[255,0,0];
+  function mix(a,b,k){ return [a[0]+(b[0]-a[0])*k, a[1]+(b[1]-a[1])*k, a[2]+(b[2]-a[2])*k]; }
+  function hex(c){ return '#'+c.map(v=>Math.round(v).toString(16).padStart(2,'0')).join(''); }
+  function barState(rpm, t){
+    const n = CFG.n, slots = n >> 1, cells = new Array(n).fill(null);
+    if (rpm < CFG.start) return cells;
+    let col, level;
+    if (rpm >= CFG.blink){
+      const on = (Math.floor(t / (CFG.period/2)) & 1) === 0;
+      if (!on) return cells;
+      col = BLINK; level = slots;
+    } else {
+      level = Math.min(slots, 1 + Math.floor((rpm - CFG.start) * (slots - 1) / (CFG.red - CFG.start)));
+      col = rpm < CFG.mid ? LOW : mix(MID, HIGH, Math.min(1, (rpm - CFG.mid) / (CFG.red - CFG.mid)));
+    }
+    for (let i=0;i<level;i++){ cells[i] = col; cells[n-1-i] = col; }
+    return cells;
+  }
+
+  /* ---------- a simulated pull through the gears ---------- */
+  const PULLS = [ {g:'2ND',from:2600,to:7100,ms:3000}, {g:'3RD',from:4400,to:7100,ms:2700}, {g:'4TH',from:4900,to:7100,ms:2500}, {g:'5TH',from:5200,to:7100,ms:2600} ];
+  const sim = { i:0, t0:performance.now(), rpm:2600, gear:'2ND' };
+  function simTick(now){
+    if (reduced){ sim.rpm = 6400; sim.gear='3RD'; return; }
+    const p = PULLS[sim.i]; const el = now - sim.t0;
+    const HOLD=520, DROP=260;
+    if (el < p.ms){ const k=el/p.ms; const e = 1-Math.pow(1-k,1.6); sim.rpm = p.from + (p.to-p.from)*e; sim.gear=p.g; }
+    else if (el < p.ms+HOLD){ sim.rpm = 7100 + 60*Math.sin(el/40); }
+    else if (el < p.ms+HOLD+DROP){ const n = PULLS[(sim.i+1)%PULLS.length]; const k=(el-p.ms-HOLD)/DROP; sim.rpm = 7100 + (n.from-7100)*k; }
+    else { sim.i=(sim.i+1)%PULLS.length; sim.t0=now; }
+  }
+
+  /* ---------- DOM mimic + tach ---------- */
+  const mimic = Array.from(document.querySelectorAll('#mimic i'));
+  const rpmOut = document.getElementById('rpmOut'), gearOut = document.getElementById('gearOut');
+  let lastShown = -1;
+  function paintDom(cells){
+    cells.forEach((c,i)=>{ const el=mimic[i]; if(c){ const h=hex(c); el.style.background=h; el.style.boxShadow='0 0 10px '+h+'88'; } else { el.style.background='#1c2b23'; el.style.boxShadow='none'; } });
+    const shown = Math.round(sim.rpm/10)*10;
+    if (shown !== lastShown){ rpmOut.textContent = String(shown); lastShown = shown; }
+    gearOut.textContent = sim.gear;
+  }
+
+  function b64buf(id){
+    const s = document.getElementById(id).textContent.trim();
+    const bin = atob(s); const u = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+    return u.buffer;
+  }
+  function glowTexture(){
+    const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
+    const r=g.createRadialGradient(64,64,0,64,64,64); r.addColorStop(0,'rgba(255,255,255,1)'); r.addColorStop(.35,'rgba(255,255,255,.55)'); r.addColorStop(1,'rgba(255,255,255,0)');
+    g.fillStyle=r; g.fillRect(0,0,128,128); const t=new THREE.CanvasTexture(c); return t;
+  }
+
+  /* ---------- one clock for the bar: DOM mimic and 3D both read cellsNow ---------- */
+  let cellsNow = barState(sim.rpm, 0);
+  (function simLoop(now){ simTick(now); cellsNow = barState(sim.rpm, now); paintDom(cellsNow); requestAnimationFrame(simLoop); })(performance.now());
+
+  /* ---------- hero: the STL with live LEDs inside it ---------- */
+  let heroOk = false;
+  const leds = [], glows = [];
+  function heroFallback(why){
+    const stage = document.getElementById('stage');
+    stage.dataset.err = String(why || 'no webgl');
+    document.getElementById('heroFallback').hidden = false;
+    stage.querySelector('.hint').textContent = 'Installed · under the tach pod';
+  }
+  function makeRenderer(canvas){
+    // the first WebGL context on a cold GPU process can fail once; try twice before giving up
+    for (let i=0;i<2;i++){ try { return new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'}); } catch(e){ if (i) throw e; } }
+  }
+  (function hero(){
+    const canvas = document.getElementById('hero3d'); const stage = document.getElementById('stage');
+    if (typeof THREE === 'undefined' || !THREE.STLLoader){ heroFallback('three or STLLoader missing'); return; }
+    let renderer;
+    try { renderer = makeRenderer(canvas); } catch(e){ heroFallback(e); return; }
+    try {
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding = THREE.sRGBEncoding;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(30, 1, 1, 2000); camera.position.set(62, 48, 178);
+    scene.add(new THREE.HemisphereLight(0xdde8e0, 0x0b1811, .7));
+    const key = new THREE.DirectionalLight(0xfff1dd, 1.15); key.position.set(90,140,80); scene.add(key);
+    const rim = new THREE.DirectionalLight(0x8fd0ff, .55); rim.position.set(-120,60,-90); scene.add(rim);
+    const fill = new THREE.DirectionalLight(0xd89459, .25); fill.position.set(-40,-30,120); scene.add(fill);
+
+    // The STL is in print orientation: slot face up. Installed, that face stands vertical toward the
+    // driver with the LEDs along its top edge, so STL z points at the camera and STL y is up. No rotation.
+    const group = new THREE.Group(); scene.add(group);
+    loadSTL(function(geo){
+    try {
+    geo.computeBoundingBox(); const bb = geo.boundingBox; const c = bb.getCenter(new THREE.Vector3());
+    geo.translate(-c.x,-c.y,-c.z);
+    const housing = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({color:0x17191c, roughness:.82, metalness:.04}));
+    group.add(housing);
+    // The eight slots, measured off the STL's top face: 5.75 mm windows on a 6.64 mm pitch, centred
+    // at y 69.98, under a 1.8 mm skin whose outer surface is z 59. Coordinates are the STL's own (mm).
+    const SLOT_X = [-41.38,-34.88,-28.13,-21.5,-14.88,-8.13,-1.63,5.12];
+    const ledY = 69.98 - c.y, ledZ = 56.4 - c.z, topZ = 59.0 - c.z;
+    const strip = new THREE.Mesh(new THREE.BoxGeometry(56, 9.5, 1.2), new THREE.MeshStandardMaterial({color:0x0a0b0c, roughness:.6}));
+    strip.position.set(-18.2 - c.x, ledY, ledZ-1.4); group.add(strip);
+    const tex = glowTexture();
+    for (let i=0;i<8;i++){
+      const x = SLOT_X[i] - c.x;
+      const m = new THREE.Mesh(new THREE.BoxGeometry(5,5,1.6), new THREE.MeshBasicMaterial({color:0x1a2620}));
+      m.position.set(x, ledY, ledZ); group.add(m); leds.push(m);
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({map:tex, color:0x000000, transparent:true, blending:THREE.AdditiveBlending, depthWrite:false}));
+      sp.position.set(x, ledY, topZ+1.2); sp.scale.set(15,15,1); group.add(sp); glows.push(sp);
+    }
+    const lamp = new THREE.PointLight(0x000000, 0, 110, 2); lamp.position.set(-18.2 - c.x, 10, 42); scene.add(lamp);
+
+    const controls = new THREE.OrbitControls(camera, canvas);
+    controls.enableZoom=false; controls.enablePan=false; controls.enableDamping=true; controls.dampingFactor=.08;
+    controls.autoRotate = false; controls.target.set(0,0,0);
+    controls.minPolarAngle = .5; controls.maxPolarAngle = 1.6;
+    // ambient motion: a slow sway that keeps the LED face toward you, instead of a spin that would
+    // show the open back half the time. Any drag hands the housing over to you.
+    let sway = !reduced; controls.addEventListener('start', function(){ sway = false; });
+
+    function size(){ const w=stage.clientWidth, h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+    size(); addEventListener('resize', size);
+    heroOk = true;
+    const off = new THREE.Color(0x1a2620);
+    function frame(now){
+      if (sway) group.rotation.y = Math.sin(now/2600) * .55, group.rotation.x = Math.sin(now/4100) * .08;
+      const cells = cellsNow;
+      let lit=0, acc=[0,0,0];
+      cells.forEach((cc,i)=>{
+        if (cc){ leds[i].material.color.setRGB(cc[0]/255,cc[1]/255,cc[2]/255); glows[i].material.color.setRGB(cc[0]/255,cc[1]/255,cc[2]/255); glows[i].material.opacity=.9; lit++; acc[0]+=cc[0];acc[1]+=cc[1];acc[2]+=cc[2]; }
+        else { leds[i].material.color.copy(off); glows[i].material.opacity=0; }
+      });
+      if (lit){ lamp.color.setRGB(acc[0]/lit/255,acc[1]/lit/255,acc[2]/lit/255); lamp.intensity = .25 + lit*.22; } else lamp.intensity = 0;
+      controls.update(); renderer.render(scene,camera); requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    } catch(e){ heroOk = false; heroFallback(e); }
+    }, function(e){ heroFallback(e); });
+    } catch(e){ heroOk = false; heroFallback(e); }
+  })();
+
+  /* ---------- board viewer: the KiCad GLB, started when it scrolls into view ---------- */
+  (function board(){
+    const box = document.getElementById('boardViewer'); const canvas = document.getElementById('board3d');
+    const loading = document.getElementById('boardLoading');
+    if (typeof THREE === 'undefined' || !THREE.GLTFLoader){ document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); return; }
+    let started=false, visible=false, renderer, scene, camera, controls;
+    function start(){
+      started=true;
+      try { renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true}); } catch(e){ document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); return; }
+      renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding = THREE.sRGBEncoding;
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(32, 4/3, .1, 1000); camera.position.set(38, 44, 52);
+      // KiCad's GLB materials are already bright; keep the light low or the mask washes to mint
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x1a2a20, .35));
+      const k = new THREE.DirectionalLight(0xfff4e8, .55); k.position.set(40,80,30); scene.add(k);
+      const r = new THREE.DirectionalLight(0xbfe2ff, .22); r.position.set(-60,30,-40); scene.add(r);
+      controls = new THREE.OrbitControls(camera, canvas); controls.enableDamping=true; controls.dampingFactor=.08; controls.autoRotate=!reduced; controls.autoRotateSpeed=.7; controls.minDistance=30; controls.maxDistance=140;
+      loadGLB(function(gltf){
+        const root = gltf.scene;
+        const bb = new THREE.Box3().setFromObject(root); const sz = bb.getSize(new THREE.Vector3()); const c = bb.getCenter(new THREE.Vector3());
+        const s = 60 / Math.max(sz.x, sz.y, sz.z);        // fit the long edge to 60 units whatever KiCad's unit was
+        root.position.sub(c).multiplyScalar(s); root.scale.setScalar(s);
+        // glTF is y-up and KiCad's exporter honours it: the board is already flat
+        const g = new THREE.Group(); g.add(root); scene.add(g);
+        loading.classList.add('off');
+      }, function(err){ console.error(err); document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); });
+      function size(){ const w=box.clientWidth, h=box.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+      size(); addEventListener('resize', size);
+      (function frame(){ if (visible){ controls.update(); renderer.render(scene,camera); } requestAnimationFrame(frame); })();
+    }
+    new IntersectionObserver(function(es){ es.forEach(function(e){ visible = e.isIntersecting; if (visible && !started) start(); }); }, {rootMargin:'200px'}).observe(box);
+  })();
+})();
+</script>

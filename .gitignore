@@ -1,0 +1,5 @@
+# derived, large, and rebuilt by build.py / pack.py
+assets.json
+preview.html
+look*.png
+__pycache__/
