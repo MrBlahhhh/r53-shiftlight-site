@@ -229,7 +229,7 @@
     </div>
     <div class="stage" id="stage">
       <canvas id="hero3d"></canvas>
-      <img class="fallback" id="heroFallback" hidden alt="The 3D-printed housing, rendered" src="assets/installed.webp">
+      <img class="fallback" id="heroFallback" hidden alt="The 3D-printed housing, rendered" src="assets/installed.webp?v=3689cd9e">
       <div class="tach"><div class="rpm" id="rpmOut">2600</div><div class="unit">RPM · simulated pull</div><div class="gear" id="gearOut">2ND</div></div>
       <div class="hint">Drag to turn the housing · live from the STL</div>
     </div>
@@ -258,7 +258,7 @@
     </div>
     <div class="split">
       <figure class="frame">
-        <img src="assets/installed.webp" alt="The printed housing clipped to the column shroud, directly below the tach pod, in a red R53 interior">
+        <img src="assets/installed.webp?v=3689cd9e" alt="The printed housing clipped to the column shroud, directly below the tach pod, in a red R53 interior">
         <figcaption><span>Installed · under the tach pod</span><span>R53 · column shroud</span></figcaption>
       </figure>
       <div>
@@ -295,7 +295,7 @@
     <div class="split">
       <div class="viewer" id="boardViewer">
         <canvas id="board3d"></canvas>
-        <img class="fallback" id="boardFallback" hidden alt="Isometric render of the carrier board" src="assets/sl_iso.webp">
+        <img class="fallback" id="boardFallback" hidden alt="Isometric render of the carrier board" src="assets/sl_iso.webp?v=5081a5cb">
         <span class="tag">Carrier · rev A · 54 × 48 mm · 4 layer</span>
         <span class="hint">Drag to turn · scroll to zoom</span>
         <div class="loading" id="boardLoading">Loading the board from KiCad…</div>
@@ -320,9 +320,9 @@
       </div>
     </div>
     <div class="gallery" style="margin-top:36px">
-      <figure class="frame"><img class="contain" src="assets/sl_top.webp" alt="Top of the carrier board: regulator, SuperMini footprint, CAN transceiver and three screw terminals"><figcaption><span>Top · from the KiCad file</span><span>rev A</span></figcaption></figure>
-      <figure class="frame"><img src="assets/bench.webp" alt="The first prototype on the bench: an 8-LED WS2812B stick wired to an ESP32-S3-Zero with a screw-terminal CAN breakout"><figcaption><span>Where it started · bench prototype</span><span>2026-07</span></figcaption></figure>
-      <figure class="frame"><img src="assets/wirerun.webp" alt="Running the wire up the A-pillar behind the trim, with the dash side panel off"><figcaption><span>Install · the wire run</span><span>A-pillar</span></figcaption></figure>
+      <figure class="frame"><img class="contain" src="assets/sl_top.webp?v=37e089f5" alt="Top of the carrier board: regulator, SuperMini footprint, CAN transceiver and three screw terminals"><figcaption><span>Top · from the KiCad file</span><span>rev A</span></figcaption></figure>
+      <figure class="frame"><img src="assets/bench.webp?v=66b03910" alt="The first prototype on the bench: an 8-LED WS2812B stick wired to an ESP32-S3-Zero with a screw-terminal CAN breakout"><figcaption><span>Where it started · bench prototype</span><span>2026-07</span></figcaption></figure>
+      <figure class="frame"><img src="assets/wirerun.webp?v=b14df516" alt="Running the wire up the A-pillar behind the trim, with the dash side panel off"><figcaption><span>Install · the wire run</span><span>A-pillar</span></figcaption></figure>
     </div>
   </div>
 </section>
@@ -336,17 +336,17 @@
       <p class="lede">The strip along the top of the screen is the real one, mirrored at 10 Hz from live RPM. Drag the redline down to 6,800 and the bar fills sooner, right there, before you have moved the car. Nothing on the Bluetooth side sits between the CAN bus and the LEDs.</p>
     </div>
     <div class="phones">
-      <div class="phone"><img src="assets/app_thr.webp" alt="Shift light screen: 5300 rpm, the mimic bar, and sliders for LEDs start, colour shift, redline and blink"><p>Thresholds · live mimic</p></div>
-      <div class="phone"><img src="assets/app_strip.webp" alt="Strip settings: colours, brightness, LED count and fill direction"><p>Colours · fill · brightness</p></div>
-      <div class="phone"><img src="assets/app_graph.webp" alt="Graph screen plotting RPM off the bus over time"><p>Graph · RPM off the bus</p></div>
-      <div class="phone"><img src="assets/app_can.webp" alt="CAN bus monitor listing every id with its rate and latest bytes"><p>CAN monitor · every id</p></div>
+      <div class="phone"><img src="assets/app_thr.webp?v=e888f3c4" alt="Shift light screen: 5300 rpm, the mimic bar, and sliders for LEDs start, colour shift, redline and blink"><p>Thresholds · live mimic</p></div>
+      <div class="phone"><img src="assets/app_strip.webp?v=b85f12b3" alt="Strip settings: colours, brightness, LED count and fill direction"><p>Colours · fill · brightness</p></div>
+      <div class="phone"><img src="assets/app_graph.webp?v=931db021" alt="Graph screen plotting RPM off the bus over time"><p>Graph · RPM off the bus</p></div>
+      <div class="phone"><img src="assets/app_can.webp?v=b92a3192" alt="CAN bus monitor listing every id with its rate and latest bytes"><p>CAN monitor · every id</p></div>
     </div>
     <div class="apply">
       <div><div class="k">Apply</div><p>Writes to RAM. The strip changes now; the change is gone at the next power cycle. Dragging a slider does not burn a flash write per frame.</p></div>
       <div><div class="k">Save</div><p>Commits what the board is running to flash. The board reports when the two differ, including first boot on a blank board, so your first edit is never lost.</p></div>
     </div>
     <div class="buyrow" style="margin-top:28px;align-items:stretch">
-      <a class="qr" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener" aria-label="Scan to get the Android app"><img src="assets/app_qr.png" alt="QR code for the Android APK" width="96" height="96"><span>Scan for<br>the APK</span></a>
+      <a class="qr" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener" aria-label="Scan to get the Android app"><img src="assets/app_qr.png?v=a1d9a08f" alt="QR code for the Android APK" width="96" height="96"><span>Scan for<br>the APK</span></a>
       <div style="display:grid;gap:10px;align-content:center">
         <div class="ctas"><a class="btn solid" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener">Android · get the APK</a>
         <a class="btn ghost" href="https://logs.geekopolis.com/shiftlight/" target="_blank" rel="noopener">iPhone · open in Bluefy</a></div>
@@ -366,10 +366,10 @@
       <p class="lede">An Android app that pulls engine telemetry straight from ECU RAM over K-line, fuses it with wideband AFR from the bridge into one time-aligned log, and then writes the calibration changes you decide on back to the EMS2000. Three one-time unlocks on Google Play: the app, the tune options, and the factory software.</p>
     </div>
     <div class="phones">
-      <div class="phone"><img src="assets/log_afr3d.webp" alt="AFR 3D surface over RPM and load, with the current sample marked"><p>AFR surface · rpm × load</p></div>
-      <div class="phone"><img src="assets/log_live.webp" alt="Live line graph of a pull: RPM, throttle, knock energy, spark advance, trims and AFR"><p>Live graph · a pull</p></div>
-      <div class="phone"><img src="assets/log_flash.webp" alt="Flash options screen with pedal map and fan toggles"><p>Flash options · pedal · fan</p></div>
-      <div class="phone"><img src="assets/log_garage.webp" alt="Garage screen choosing which car a log belongs to"><p>Garage · per-car bins and logs</p></div>
+      <div class="phone"><img src="assets/log_afr3d.webp?v=87492456" alt="AFR 3D surface over RPM and load, with the current sample marked"><p>AFR surface · rpm × load</p></div>
+      <div class="phone"><img src="assets/log_live.webp?v=b5c3f9c8" alt="Live line graph of a pull: RPM, throttle, knock energy, spark advance, trims and AFR"><p>Live graph · a pull</p></div>
+      <div class="phone"><img src="assets/log_flash.webp?v=3c66a083" alt="Flash options screen with pedal map and fan toggles"><p>Flash options · pedal · fan</p></div>
+      <div class="phone"><img src="assets/log_garage.webp?v=f380a70d" alt="Garage screen choosing which car a log belongs to"><p>Garage · per-car bins and logs</p></div>
     </div>
     <div class="tiers">
       <div><div class="k">Unlock 1 · the base · $25</div><div class="t">App</div><p>Logging, diagnostics and the 512 KB ECU backup read. Live graph, DTCs with cause and fix, autolog on wide-open throttle, AFR surface, fuel, trims and knock maps, CSV and Datazap export.</p></div>
@@ -378,7 +378,7 @@
     </div>
     <p class="decode" style="margin-top:14px">ECU write needs the App unlock plus either add-on. Flash write needs the facelift silver-cover ECU; logging works on the other boxes. Reads and writes are done key on, engine off, on a battery charger.</p>
     <div class="buyrow" style="margin-top:28px">
-      <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener" aria-label="Get it on Google Play"><img src="assets/play_badge.webp" alt="Get it on Google Play" style="height:56px;width:auto"></a>
+      <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener" aria-label="Get it on Google Play"><img src="assets/play_badge.webp?v=5fe92567" alt="Get it on Google Play" style="height:56px;width:auto"></a>
       <span class="price">$25<small>app unlock</small></span>
       <span class="price">$50<small>flash unlock</small></span>
       <span class="price">$50<small>factory software</small></span>
@@ -423,8 +423,8 @@
         </div>
       </div>
       <div style="display:grid;gap:18px">
-        <figure class="frame"><img src="assets/bridge_3d.webp" alt="Isometric render of the K-line and CAN bridge carrier: XIAO ESP32-S3 sockets, L9637D, CAN transceiver, test points and the six-way harness header"><figcaption><span>Bridge carrier · from the KiCad file</span><span>RyanRacing silk</span></figcaption></figure>
-        <figure class="frame"><img src="assets/bridge_pict.webp" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
+        <figure class="frame"><img src="assets/bridge_3d.webp?v=ea71f819" alt="Isometric render of the K-line and CAN bridge carrier: XIAO ESP32-S3 sockets, L9637D, CAN transceiver, test points and the six-way harness header"><figcaption><span>Bridge carrier · from the KiCad file</span><span>RyanRacing silk</span></figcaption></figure>
+        <figure class="frame"><img src="assets/bridge_pict.webp?v=8d40e2bd" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
       </div>
     </div>
   </div>
@@ -522,7 +522,7 @@
   'use strict';
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // The preview build carries the models inline as base64; the hosted build fetches files.
-  const ASSETS = {inline:false, stl:'assets/housing.stl', glb:'assets/board.glb'};
+  const ASSETS = {inline:false, stl:'assets/housing.stl?v=8d0a2471', glb:'assets/board.glb?v=1dade193'};
   function loadSTL(cb, err){
     if (ASSETS.inline) { try { cb(new THREE.STLLoader().parse(b64buf('stlData'))); } catch(e){ err(e); } }
     else new THREE.STLLoader().load(ASSETS.stl, cb, undefined, err);

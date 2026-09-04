@@ -15,6 +15,7 @@ re-deploy never needs kicad-cli or the blog checkout; only a new photo does.
     python build.py --preview  # preview only
 """
 import base64
+import hashlib
 import io
 import json
 import os
@@ -53,14 +54,31 @@ def load_assets():
     return out
 
 
+def versioned(rel):
+    """`assets/x.webp?v=1a2b3c4d` -- the first bytes of the file's SHA-1.
+
+    nginx sends every asset with a 30-day max-age, and the file names never
+    change, so a re-render that only swaps bytes was invisible to anyone who
+    had seen the page before: the new picture sat on the server behind the
+    old one in every browser cache. The query string changes with the
+    content, so a redeploy is seen on the next load with no cache flush.
+    """
+    path = os.path.join(DIST, rel)
+    if not os.path.exists(path):
+        return rel
+    h = hashlib.sha1(open(path, "rb").read()).hexdigest()[:8]
+    return "%s?v=%s" % (rel, h)
+
+
 def hosted(template, assets):
     def sub(m):
         k = m.group(1)
         if k == "manifest":
-            return "{inline:false, stl:'assets/housing.stl', glb:'assets/board.glb'}"
+            return "{inline:false, stl:'%s', glb:'%s'}" % (
+                versioned("assets/housing.stl"), versioned("assets/board.glb"))
         if k in ("stl", "glb"):
             return ""
-        return "assets/%s.%s" % (k, assets[k].get("ext", "webp"))
+        return versioned("assets/%s.%s" % (k, assets[k].get("ext", "webp")))
     body = re.sub(r"\{\{ASSET:(\w+)\}\}", sub, template)
     m = re.search(r"^(<title>.*?</title>\n(?:<link[^\n]*\n)+<style>.*?</style>\n)", body, re.S)
     if not m:
