@@ -3,3 +3,5 @@ assets.json
 preview.html
 look*.png
 __pycache__/
+# kicad-cli and model exports that pack.py shrinks into dist/assets (~10 MB)
+render/

@@ -25,7 +25,9 @@ Edit `template.html`, then:
 
 ```sh
 python build.py
-scp dist/index.html deploy@2.25.95.177:/var/www/r53/index.html
+# assets first, so the new index.html never names a file the server does not have yet
+rsync -av dist/assets/ deploy@2.25.95.177:/var/www/r53/assets/
+rsync -av dist/index.html deploy@2.25.95.177:/var/www/r53/index.html
 ```
 
 New images go in `dist/assets/` as WebP (photos) or PNG (the QR), referenced from the
@@ -47,13 +49,16 @@ logic changes, change `barState()` in the template to match.
 - **Board renders** — `kicad-cli pcb render`, top and `--perspective --rotate "-35,0,25"`.
 - **Photos and screenshots** — `assets/images/r53-shift-light/`, `r53-kline-bridge/`,
   `r53-logger-august/`, `r53-logger-play-store/` in the blog repo.
-- **Google Play badge** — Google's own `en_badge_web_generic.png`.
+- **Google Play badge** — Google's own `en_badge_web_generic.png`. Not on the page while the
+  logger is in Play closed testing, where the listing is "not found" until you join the testers.
 
 ## Hosting
 
 Nginx on the Hostinger VPS serves `/var/www/r53` at `location ^~ /shiftlight/` inside the
 `ryansdesigns.geekopolis.com` server block, ahead of WordPress's catch-all. `deploy` owns the
-directory, so uploads need no sudo. Three.js r128 comes from cdnjs and its loaders from
+directory, so uploads need no sudo. `index.html` goes out with `Cache-Control: no-cache` and
+`/shiftlight` redirects to `/shiftlight/`; both need `deploy/install.sh` re-run on the server
+(its v2 block replaces the one from the first install). Three.js r128 comes from cdnjs and its loaders from
 jsdelivr; the fonts from Google Fonts. Everything else is in `dist/`.
 
 ## Open items

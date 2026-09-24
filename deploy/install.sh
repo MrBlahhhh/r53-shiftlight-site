@@ -8,14 +8,18 @@
 #   1. creates /var/www/r53 owned by deploy, so later uploads need no sudo
 #   2. copies the staged site from ~deploy/r53-site into it
 #   3. adds a static `location ^~ /shiftlight/` to the ryansdesigns nginx server block,
-#      ahead of WordPress's `location /`, with a dated backup of the config
+#      ahead of WordPress's `location /`, with a dated backup of the config. A block from
+#      an older run of this script (marked without "v2") is replaced, not kept beside it.
 #   4. nginx -t, then reload only if the test passes
 set -euo pipefail
 
 SRC=/home/deploy/r53-site
 DST=/var/www/r53
-CONF=/etc/nginx/sites-enabled/ryansdesigns
-MARK="# r53-shift-light-site"
+# Resolved, so the edit lands in sites-available and the sites-enabled symlink survives
+# (fix.sh had to restore it once after a mv replaced it with a plain file).
+CONF=$(readlink -f /etc/nginx/sites-enabled/ryansdesigns)
+MARK="# r53-shift-light-site v2"
+OLD_MARK="# r53-shift-light-site"
 
 [ "$(id -u)" -eq 0 ] || { echo "run with sudo"; exit 1; }
 [ -f "$SRC/index.html" ] || { echo "no staged site at $SRC"; exit 1; }
@@ -26,23 +30,41 @@ chown -R deploy:www-data "$DST"
 find "$DST" -type d -exec chmod 755 {} + ; find "$DST" -type f -exec chmod 644 {} +
 echo "site copied to $DST ($(du -sh "$DST" | cut -f1))"
 
-if ! grep -q "$MARK" "$CONF"; then
+if ! grep -qF "$MARK" "$CONF"; then
   mkdir -p /etc/nginx/backups
   cp "$CONF" "/etc/nginx/backups/ryansdesigns.$(date +%Y%m%d-%H%M%S)"   # never inside sites-enabled: nginx includes everything there
+  STRIPPED=$(mktemp)
+  UPDATED=$(mktemp)
+  # drop the v1 block: its marker line through the first closing brace at block indent,
+  # and the blank line after it
+  awk -v old="$OLD_MARK" '
+    skipping && /^    [}]$/ { skipping=0; dropblank=1; next }
+    skipping { next }
+    dropblank && /^[ \t]*$/ { dropblank=0; next }
+    { dropblank=0 }
+    $0 ~ ("^[ \t]*" old "$") { skipping=1; next }
+    { print }' "$CONF" > "$STRIPPED"
   # insert before WordPress's catch-all location
+  #   - /shiftlight without the slash is otherwise WordPress's 404
+  #   - index.html carries the versioned asset URLs, so it is revalidated on every load;
+  #     the nested asset location sets its own headers, so the no-cache does not reach it
   awk -v mark="$MARK" '
-    /^\s*location \/ \{/ && !done {
+    /^[ \t]*location \/ \{/ && !done {
       print "    " mark
+      print "    location = /shiftlight { return 301 /shiftlight/; }"
       print "    location ^~ /shiftlight/ {"
       print "        alias /var/www/r53/;"
       print "        index index.html;"
       print "        try_files $uri $uri/ =404;"
+      print "        add_header Cache-Control \"no-cache\" always;"
       print "        location ~* \\.(webp|stl|glb)$ { expires 30d; add_header Cache-Control \"public\"; }"
       print "    }"
       print ""
       done=1
     }
-    { print }' "$CONF" > "$CONF.new" && mv "$CONF.new" "$CONF"
+    { print }' "$STRIPPED" > "$UPDATED"
+  cat "$UPDATED" > "$CONF"
+  rm -f "$STRIPPED" "$UPDATED"
   echo "nginx location added"
 else
   echo "nginx location already present"

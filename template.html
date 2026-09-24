@@ -166,6 +166,7 @@
   @media (max-width:1000px){ .pricing{grid-template-columns:repeat(2,1fr)} .pricing article{min-height:0!important} .pricing article:last-child{grid-column:1/-1} }
   @media (max-width:560px){ .pricing{grid-template-columns:1fr} }
   .note{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.04em;margin-top:16px}
+  .signup{margin-top:18px} .signup ol{margin:8px 0 0;padding-left:1.4em;display:grid;gap:8px;color:var(--silk2)} .signup ol b{color:var(--silk);font-weight:600} .signup a{color:var(--silk);word-break:break-all}
 
   /* fit + faq */
   .fit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -205,7 +206,7 @@
     <div class="copy">
       <p class="eyebrow">CAN bus shift light · MINI Cooper S R53 · 2002–06</p>
       <h1>Eyes up.<br>The bar<br><em>tells you.</em></h1>
-      <p class="lede">Eight LEDs on the column shroud, dead centre in your sightline, fed by the engine's own CAN bus. No tach signal to run, no phone required. Three seconds after the RPM frames stop, it goes dark instead of lying.</p>
+      <p class="lede">Eight LEDs on the column shroud, dead centre in your sightline, fed by the engine's own CAN bus. No tach signal to run, no phone required. Two seconds after the RPM frames stop, it goes dark instead of lying.</p>
       <div class="ctas">
         <a class="btn solid" href="#pricing">Order the shift light</a>
         <a class="btn ghost" href="#app">Get the free app</a>
@@ -282,7 +283,7 @@
       <div class="viewer" id="boardViewer">
         <canvas id="board3d"></canvas>
         <img class="fallback" id="boardFallback" hidden alt="Isometric render of the carrier board" src="{{ASSET:sl_iso}}">
-        <span class="tag">Carrier · rev A · 54 × 48 mm · 4 layer</span>
+        <span class="tag">Carrier · rev C · 54 × 58 mm · 2 layer</span>
         <span class="hint">Drag to turn · scroll to zoom</span>
         <div class="loading" id="boardLoading">Loading the board from KiCad…</div>
       </div>
@@ -291,9 +292,9 @@
         <p class="decode" style="margin-top:10px">Every terminal pin is labelled above the pin it belongs to. You wire one of these upside down under a dash with a torch in your teeth.</p>
         <div class="rule"></div>
         <dl class="spec">
-          <dt>Power</dt><dd>12 V screw terminal · fused · TVS-clamped · reverse-blocked · <b>R-78E5.0</b> switching regulator</dd>
+          <dt>Power</dt><dd>12 V screw terminal · fused · TVS-clamped · reverse-blocked · <b>MP1584</b> buck module soldered on, trimmed to 5.0 V</dd>
           <dt>CAN</dt><dd><b>SN65HVD230</b> on the board with bus clamps · listen-only, never ACKs · termination jumper ships open</dd>
-          <dt>Strip drive</dt><dd><b>74AHCT1G125</b> level shifter and 330 Ω, not the ESP32 pin bare</dd>
+          <dt>Strip drive</dt><dd><b>GPIO4</b> straight to the strip's DIN at 3.3 V logic, proven on the car</dd>
           <dt>Brain</dt><dd><b>ESP32-C3 SuperMini</b>, soldered flat, USB-C overhanging the top edge</dd>
           <dt>RPM</dt><dd>CAN id 0x316, bytes 2–3, ÷ 6.4 · a 2 s silence blanks the bar</dd>
           <dt>Mount</dt><dd>M3 at the four corners</dd>
@@ -306,7 +307,7 @@
       </div>
     </div>
     <div class="gallery" style="margin-top:36px">
-      <figure class="frame"><img class="contain" src="{{ASSET:sl_top}}" alt="Top of the carrier board: regulator, SuperMini footprint, CAN transceiver and three screw terminals"><figcaption><span>Top · from the KiCad file</span><span>rev A</span></figcaption></figure>
+      <figure class="frame"><img class="contain" src="{{ASSET:sl_top}}" alt="Top of the carrier board: MP1584 buck module, SuperMini footprint, CAN transceiver and three screw terminals"><figcaption><span>Top · from the KiCad file</span><span>rev C</span></figcaption></figure>
       <figure class="frame"><img src="{{ASSET:bench}}" alt="The first prototype on the bench: an 8-LED WS2812B stick wired to an ESP32-S3-Zero with a screw-terminal CAN breakout"><figcaption><span>Where it started · bench prototype</span><span>2026-07</span></figcaption></figure>
       <figure class="frame"><img src="{{ASSET:wirerun}}" alt="Running the wire up the A-pillar behind the trim, with the dash side panel off"><figcaption><span>Install · the wire run</span><span>A-pillar</span></figcaption></figure>
     </div>
@@ -364,11 +365,21 @@
     </div>
     <p class="decode" style="margin-top:14px">ECU write needs the App unlock plus either add-on. Flash write needs the facelift silver-cover ECU; logging works on the other boxes. Reads and writes are done key on, engine off, on a battery charger.</p>
     <div class="buyrow" style="margin-top:28px">
-      <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener" aria-label="Get it on Google Play"><img src="{{ASSET:play_badge}}" alt="Get it on Google Play" style="height:56px;width:auto"></a>
+      <a class="btn solid" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join the tester group</a>
       <span class="price">$25<small>app unlock</small></span>
       <span class="price">$50<small>flash unlock</small></span>
       <span class="price">$50<small>factory software</small></span>
       <span class="decode">Works with a K+DCAN USB cable and USB-C OTG. Works better with the bridge: wideband AFR, CAN channels and the shift light in one log.</span>
+    </div>
+    <!-- Play closed testing: the store listing is "not found" to anyone who has not done steps 1 and 2.
+         Steps as the blog gives them in 2026-07-24-r53-logger-play-store and 2026-08-18-r53-logger-august-update. -->
+    <div class="signup" id="logger-signup">
+      <p class="decode">In Google Play closed testing, so it does not show up in a Play search. Three steps, all with the Google account on your Android phone:</p>
+      <ol>
+        <li><b>Join the tester group</b> at <a href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">groups.google.com/g/r53-logger-testers</a> and tap Join group. It is open, no approval.</li>
+        <li><b>Opt in on Play</b> at <a href="https://play.google.com/apps/testing/com.geekopolis.r53logger" target="_blank" rel="noopener">play.google.com/apps/testing/com.geekopolis.r53logger</a> and tap Become a tester.</li>
+        <li><b>Install it</b> from <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">the Play listing</a>. If it says the app is not found, Play is signed in to a different Google account or has not caught up yet; give it a few minutes.</li>
+      </ol>
     </div>
     <p class="note">Off-road and competition use. An ECU flash can brick a car; the app backs up the stock BIN first and refuses to write on a shared wire. <b>R53 Coding</b>, the module-coding companion, is a separate app with its own unlock.</p>
   </div>
@@ -405,7 +416,7 @@
         <div class="buyrow" style="margin-top:22px">
           <span class="price">$189<small>bridge · OBD2 pigtail</small></span>
           <a class="btn solid" href="#pricing">Add to order</a>
-          <a class="btn ghost" href="https://github.com/MrBlahhhh/R53_Mini_Kline_Canbus_Logger_Shiftlight" target="_blank" rel="noopener">Hardware on GitHub</a>
+          <a class="btn ghost" href="https://mrblahhhh.github.io/car/tech/2026/08/27/r53-kline-canbus-bridge-hardware.html" target="_blank" rel="noopener">The hardware write-up</a>
         </div>
       </div>
       <div style="display:grid;gap:18px">
@@ -429,13 +440,13 @@
         <div class="k">Print it</div><div class="t">Housing</div>
         <ul><li class="base">Printed shroud, matte black</li><li class="base">Fits the 8-LED stick, 6.64 mm pitch</li></ul>
         <div class="price">$19</div>
-        <a class="btn ghost" href="#">Add</a>
+        <a class="btn ghost" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20shift%20light%20housing">Email to order</a>
       </article>
       <article>
         <div class="k">Bolt it in</div><div class="t">Shift light</div>
-        <ul><li class="base">Housing</li><li>Carrier rev A, assembled</li><li>ESP32-C3, firmware loaded</li><li>8-LED strip, 12 V harness</li></ul>
+        <ul><li class="base">Housing</li><li>Carrier rev C, assembled</li><li>ESP32-C3, firmware loaded</li><li>8-LED strip, 12 V harness</li></ul>
         <div class="price">$125</div>
-        <a class="btn ghost" href="#">Add</a>
+        <a class="btn ghost" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20shift%20light%2C%20assembled">Email to order</a>
       </article>
       <article>
         <div class="k">Free</div><div class="t">App</div>
@@ -447,16 +458,16 @@
         <div class="k">Want more</div><div class="t">Logger · Flasher</div>
         <ul><li class="base">K+DCAN cable or the bridge</li><li>App unlock $25: log, diagnose, back up</li><li>Flash unlock $50: tune options</li><li>Factory software $50: US S, JCW, GP1</li></ul>
         <div class="price">$75<small>app + flash · $125 with factory software</small></div>
-        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Google Play</a>
+        <a class="btn ghost" href="#logger-signup">Join the testers</a>
       </article>
       <article class="hot">
         <div class="k">Top of the range</div><div class="t">Bridge</div>
         <ul><li class="base">Shift light</li><li>K-line transceiver</li><li>CAN listen-only</li><li>OBD2 pigtail, wired</li><li>The logger's best input</li></ul>
         <div class="price">$189</div>
-        <a class="btn solid" href="#">Add</a>
+        <a class="btn solid" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20K-line%20%2B%20CAN%20bridge">Email to order</a>
       </article>
     </div>
-    <p class="note">Shift light $125 and the three logger unlocks ($25 app, $50 flash, $50 factory software) are confirmed. Housing and bridge prices are placeholders. Shipping and lead time to be confirmed.</p>
+    <p class="note">To order, email <b>matt@geekopolis.com</b> with the item in the subject; the buttons above fill it in. Shift light $125 and the three logger unlocks ($25 app, $50 flash, $50 factory software) are confirmed. Housing and bridge prices are placeholders. Shipping and lead time to be confirmed.</p>
   </div>
 </section>
 
@@ -490,17 +501,17 @@
     </div>
     <div class="links">
       <a href="https://github.com/MrBlahhhh/esp32-shift-light-R53-mini" target="_blank" rel="noopener">Shift light</a>
-      <a href="https://github.com/MrBlahhhh/R53_Mini_Kline_Canbus_Logger_Shiftlight" target="_blank" rel="noopener">Bridge</a>
+      <a href="https://mrblahhhh.github.io/car/tech/2026/08/27/r53-kline-canbus-bridge-hardware.html" target="_blank" rel="noopener">Bridge</a>
       <a href="https://mrblahhhh.github.io/" target="_blank" rel="noopener">Blog</a>
       <a href="https://mrblahhhh.github.io/r53-esp32/privacy.html" target="_blank" rel="noopener">Privacy</a>
     </div>
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha384-CI3ELBVUz9XQO+97x6nwMDPosPR5XvsxW2ua7N1Xeygeh1IxtgqtCkGfQY9WWdHu" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js" integrity="sha384-QF8EmP6pyNE+i7WmcltzC4ddzFVKDxfn5WD5gXyKTSE4SCw0R25TI+q0LUlnf7tq" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js" integrity="sha384-fljlqkjWlmSFjkESkQvm77heIZpoWmXEOzlCA7kOpGUH+95Zk0yGfQieWM2q136E" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" integrity="sha384-wagZhIFgY4hD+7awjQjR4e2E294y6J2HSnd8eTNc15ZubTeQeVRZwhQJ+W6hnBsf" crossorigin="anonymous"></script>
 <script id="stlData" type="text/plain">{{ASSET:stl}}</script>
 <script id="glbData" type="text/plain">{{ASSET:glb}}</script>
 <script>
