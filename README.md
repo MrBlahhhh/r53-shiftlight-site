@@ -28,7 +28,16 @@ python build.py
 # assets first, so the new index.html never names a file the server does not have yet
 rsync -av dist/assets/ deploy@2.25.95.177:/var/www/r53/assets/
 rsync -av dist/index.html deploy@2.25.95.177:/var/www/r53/index.html
+# and the same into the staging copy install.sh deploys from
+rsync -av dist/assets/ deploy@2.25.95.177:r53-site/assets/
+rsync -av dist/index.html deploy@2.25.95.177:r53-site/index.html
 ```
+
+Keep `~/r53-site` on the server current. `deploy/install.sh` runs
+`rsync --delete` from it into `/var/www/r53`, so a stale staging copy puts the old page
+back live and deletes anything else in the web root. That happened on 2026-09-29: the
+Sep 3 page came back after the no-cache fix. On Windows, which has no rsync, `scp` the
+same files to the same places.
 
 New images go in `dist/assets/` as WebP (photos) or PNG (the QR), referenced from the
 template as `{{ASSET:name}}`; add the key to `assets.json` if you regenerate the preview.
