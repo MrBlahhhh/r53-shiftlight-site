@@ -166,7 +166,17 @@
   @media (max-width:1000px){ .pricing{grid-template-columns:repeat(2,1fr)} .pricing article{min-height:0!important} .pricing article:last-child{grid-column:1/-1} }
   @media (max-width:560px){ .pricing{grid-template-columns:1fr} }
   .note{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.04em;margin-top:16px}
-  .signup{margin-top:18px} .signup ol{margin:8px 0 0;padding-left:1.4em;display:grid;gap:8px;color:var(--silk2)} .signup ol b{color:var(--silk);font-weight:600} .signup a{color:var(--silk);word-break:break-all}
+  /* logger signup: the blog's "Get it" step cards, in the blog's red (#e8323c) */
+  .signup{margin-top:22px}
+  /* scoped: the ladder's colour bars are also .step */
+  .signup .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+  .signup .step{display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid rgba(232,50,60,.35);border-radius:4px;background:var(--panel);box-shadow:0 0 24px rgba(232,50,60,.08)}
+  .signup .step-head{display:flex;align-items:center;gap:12px}
+  .signup .step-num{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:50%;background:#e8323c;color:#fff;font-family:var(--mono);font-weight:700}
+  .signup .step h3{font-size:clamp(22px,2vw,28px)}
+  .signup .step p{font-size:15px;color:var(--silk2);flex:1}
+  .btn.red{background:#e8323c;color:#fff;justify-content:center} .btn.red:hover{background:#ff4d57}
+  @media (max-width:760px){ .signup .steps{grid-template-columns:1fr} }
 
   /* fit + faq */
   .fit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -367,7 +377,7 @@
     </div>
     <p class="decode" style="margin-top:14px">ECU write needs the App unlock plus either add-on. Flash write needs the facelift silver-cover ECU; logging works on the other boxes. Reads and writes are done key on, engine off, on a battery charger.</p>
     <div class="buyrow" style="margin-top:28px">
-      <a class="btn solid" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join the tester group</a>
+      <a class="btn red" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join the tester group</a>
       <span class="price">$25<small>app unlock</small></span>
       <span class="price">$50<small>flash unlock</small></span>
       <span class="price">$50<small>factory software</small></span>
@@ -377,11 +387,23 @@
          Steps as the blog gives them in 2026-07-24-r53-logger-play-store and 2026-08-18-r53-logger-august-update. -->
     <div class="signup" id="logger-signup">
       <p class="decode">In Google Play closed testing, so it does not show up in a Play search. Three steps, all with the Google account on your Android phone:</p>
-      <ol>
-        <li><b>Join the tester group</b> at <a href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">groups.google.com/g/r53-logger-testers</a> and tap Join group. It is open, no approval.</li>
-        <li><b>Opt in on Play</b> at <a href="https://play.google.com/apps/testing/com.geekopolis.r53logger" target="_blank" rel="noopener">play.google.com/apps/testing/com.geekopolis.r53logger</a> and tap Become a tester.</li>
-        <li><b>Install it</b> from <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">the Play listing</a>. If it says the app is not found, Play is signed in to a different Google account or has not caught up yet; give it a few minutes.</li>
-      </ol>
+      <div class="steps">
+        <div class="step">
+          <div class="step-head"><span class="step-num">1</span><h3>Join the group</h3></div>
+          <p>Open to anyone, no approval. Tap Join group.</p>
+          <a class="btn red" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join group</a>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">2</span><h3>Opt in on Play</h3></div>
+          <p>Tap Become a tester.</p>
+          <a class="btn red" href="https://play.google.com/apps/testing/com.geekopolis.r53logger" target="_blank" rel="noopener">Become a tester</a>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">3</span><h3>Install</h3></div>
+          <p>Install from Play on your phone. If it says the app is not found, Play is on a different Google account or has not caught up yet; give it a few minutes.</p>
+          <a class="btn red" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Open in Play</a>
+        </div>
+      </div>
     </div>
     <p class="note">Off-road and competition use. An ECU flash can brick a car; the app backs up the stock BIN first and refuses to write on a shared wire. <b>R53 Coding</b>, the module-coding companion, is a separate app with its own unlock.</p>
   </div>
