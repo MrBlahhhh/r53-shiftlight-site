@@ -1,48 +1,123 @@
 {
-  "can": {
-    "model": "dist/assets/board.glb",
+  "photos": {
+    "can": {
+      "source": "photos/can-revc-assembled.png",
+      "assembly": "Assembled CAN Rev C board",
+      "provided": "Matt, 2026-10-11"
+    },
+    "kline": {
+      "source": "photos/kline-can-revc-partial.png",
+      "assembly": "Partially assembled K-line + CAN Rev C board",
+      "provided": "Matt, 2026-10-11",
+      "display": "180 degree CSS rotation; original source pixels retained"
+    }
+  },
+  "canModel": {
+    "source": "dist/assets/board.glb",
     "sourceCommit": "fda212b (2026-09-03, real ESP32 models, Rev C boards)",
     "sha256": "0e79ff00a9d893b29a1e9e12c135469b8741521a5c8a03b116861f2b8e7d04c0",
-    "method": "Existing Rev C GLB converted to STL without geometry changes, then rendered."
+    "method": "GLB rendered directly with original KiCad material colors",
+    "stats": {
+      "source": "dist/assets/board.glb",
+      "dimensionsMm": [
+        54.000001,
+        59.26,
+        9.345
+      ],
+      "materialCount": 27,
+      "vertices": 74880,
+      "polygons": 69348,
+      "method": "Direct GLB rendering, original KiCad material colors retained."
+    }
   },
-  "kline": {
-    "model": "../R53_Mini_Kline_Canbus_Logger_Shiftlight/hardware/pcb/rev-c/r53-kline-can-carrier-rev-c.stl",
-    "sha256": "b18df0531a8b1cb5369dfb17a0f3b49ea9ccf12d8d0d576c6c38548a2232a76e",
-    "method": "Frozen Rev C STL rendered directly."
+  "klineModel": {
+    "source": "../R53_Mini_Kline_Canbus_Logger_Shiftlight/hardware/pcb/rev-c/pictures/board-iso.png",
+    "method": "Existing color KiCad render of the frozen Rev C board"
   },
-  "renderer": "Blender 5.2.1 LTS, Cycles CPU, neutral CAD surface, transparent background",
   "images": {
+    "sl_photo": {
+      "source": "photos\\can-revc-assembled.png",
+      "sourceSha256": "ae0565d5013d8bf6cea0fd059b6d192b3ea47d5d8fe79c573d0ff414f56f978e",
+      "sourceDimensions": [
+        602,
+        585
+      ],
+      "dimensions": [
+        602,
+        585
+      ],
+      "bytes": 78662,
+      "sha256": "549d8f0721d4afee8b4c55b9899de21808f79558c6ce0ab614b261e0cb102c0f"
+    },
+    "bridge_photo": {
+      "source": "photos\\kline-can-revc-partial.png",
+      "sourceSha256": "a89008706ebd86857002d56a23a396821ee66e04bb9425b0f6568394a8c46f49",
+      "sourceDimensions": [
+        907,
+        815
+      ],
+      "dimensions": [
+        907,
+        815
+      ],
+      "bytes": 139136,
+      "sha256": "3ffe960c02a60f4848b102d179d2d94473e520696019e68f5a1d6e7ef0c59b8e"
+    },
     "sl_iso": {
+      "source": "render\\shiftlight_iso.png",
+      "sourceSha256": "8f9355c3a4cf39563431773fd4cfbd5f2f0e2a4f15ffbfe681b3d7604ea41301",
+      "sourceDimensions": [
+        1600,
+        1200
+      ],
       "dimensions": [
         1270,
-        946
+        945
       ],
-      "bytes": 30806,
-      "sha256": "30861b070c1f9b10e8fbf79a367a9c96256dfe4b8bf4a9787942c7af0608e3bb"
+      "bytes": 72752,
+      "sha256": "878841ac67ce4983d60be8f855fa43e4877ec332eeae75670694bbfd6f555ef0"
     },
     "sl_top": {
+      "source": "render\\pcb_top.png",
+      "sourceSha256": "f8c10f3bf98c32cca173ffdb3b7b2afb7bdcb35322bfc7e96149c7859c1c93f4",
+      "sourceDimensions": [
+        1600,
+        1200
+      ],
       "dimensions": [
         1030,
         1130
       ],
-      "bytes": 28276,
-      "sha256": "6a12edb69d490674e5595d2b5afaed734f10f29dc76bbcf515b60e48ab2c2cec"
+      "bytes": 61316,
+      "sha256": "68acdfe9a85f02339d25c1f47c18be188a6d00a52d989f561e1e30f6ae642981"
     },
     "bridge_3d": {
-      "dimensions": [
-        1199,
-        837
+      "source": "../R53_Mini_Kline_Canbus_Logger_Shiftlight/hardware/pcb/rev-c/pictures/board-iso.png",
+      "sourceSha256": "3fef076be18fe7ead205c86cdf57a118697836bb265b8cb9f3d3d8440dd0aff1",
+      "sourceDimensions": [
+        1768,
+        1768
       ],
-      "bytes": 25896,
-      "sha256": "164ea6e167ef841d6b76332eb8c3792a9ed12203014be38a5903316d75f21170"
+      "dimensions": [
+        1600,
+        1371
+      ],
+      "bytes": 262840,
+      "sha256": "d7b274b1de8cb173f81d984e83d2c6a32e80a8e7aff12dff3274f517a47fe90a"
     },
     "br_iso": {
-      "dimensions": [
-        1199,
-        837
+      "source": "../R53_Mini_Kline_Canbus_Logger_Shiftlight/hardware/pcb/rev-c/pictures/board-iso.png",
+      "sourceSha256": "3fef076be18fe7ead205c86cdf57a118697836bb265b8cb9f3d3d8440dd0aff1",
+      "sourceDimensions": [
+        1768,
+        1768
       ],
-      "bytes": 25896,
-      "sha256": "164ea6e167ef841d6b76332eb8c3792a9ed12203014be38a5903316d75f21170"
+      "dimensions": [
+        1600,
+        1371
+      ],
+      "bytes": 262840,
+      "sha256": "d7b274b1de8cb173f81d984e83d2c6a32e80a8e7aff12dff3274f517a47fe90a"
     }
   }
 }

@@ -91,6 +91,10 @@
   .frame{position:relative;border:1px solid var(--line);background:var(--panel);padding:10px}
   .frame figcaption{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);padding:12px 4px 2px;display:flex;justify-content:space-between;gap:12px}
   .frame img{width:100%}
+  .product-photo{margin:0}
+  .product-photo img{height:auto;object-fit:contain}
+  .rotate-half-turn{transform:rotate(180deg)}
+  .photo-note{font-size:13px;line-height:1.5;color:var(--mute);padding:10px 4px 2px}
   .spec{display:grid;grid-template-columns:max-content 1fr;gap:10px 22px;font-family:var(--mono);font-size:13px;line-height:1.5;margin:0}
   .spec dt{color:var(--copper);letter-spacing:.06em;text-transform:uppercase;font-size:11px;padding-top:3px}
   .spec dd{margin:0;color:var(--silk2);font-variant-numeric:tabular-nums}
@@ -132,6 +136,8 @@
   /* gallery */
   .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   .gallery .frame{display:flex;flex-direction:column}
+  .gallery .viewer{aspect-ratio:4/5;flex:none}
+  .gallery .viewer .hint{left:12px;right:12px;text-align:center;font-size:10px}
   .gallery .frame img{aspect-ratio:4/5;object-fit:cover;width:100%}
   .gallery .frame img.contain{object-fit:contain}
   @media (max-width:900px){ .gallery{grid-template-columns:1fr 1fr} } @media (max-width:560px){ .gallery{grid-template-columns:1fr} }
@@ -290,13 +296,10 @@
       <p class="lede">The carrier replaces a dev board, a CAN breakout, a USB buck module and the harness between them, every joint of which is a thing that vibrates loose in a car. Twelve volts in on a screw terminal; the strip and the bus on two more.</p>
     </div>
     <div class="split">
-      <div class="viewer" id="boardViewer">
-        <canvas id="board3d"></canvas>
-        <img class="fallback" id="boardFallback" hidden alt="STL render of the Rev C CAN shift light carrier" src="{{ASSET:sl_iso}}">
-        <span class="tag">Carrier · rev C · 54 × 58 mm · 2 layer</span>
-        <span class="hint">Drag to turn · scroll to zoom</span>
-        <div class="loading" id="boardLoading">Loading the board from KiCad…</div>
-      </div>
+      <figure class="frame product-photo">
+        <img src="{{ASSET:sl_photo}}" width="602" height="585" alt="The assembled red Rev C CAN shift light board with its ESP32-C3, buck module and screw terminals">
+        <figcaption><span>CAN · assembled board</span><span>Rev C</span></figcaption>
+      </figure>
       <div>
         <div class="silk"><span>J1</span>+12V GND <span>J2</span>CANH CANL <span>J3</span>+5V DATA GND</div>
         <p class="decode" style="margin-top:10px">Every terminal pin is labelled above the pin it belongs to. You wire one of these upside down under a dash with a torch in your teeth.</p>
@@ -317,8 +320,16 @@
       </div>
     </div>
     <div class="gallery" style="margin-top:36px">
-      <figure class="frame"><img class="contain" src="{{ASSET:sl_top}}" alt="Top-view STL render of the Rev C CAN shift light carrier"><figcaption><span>CAN · STL top view</span><span>Rev C</span></figcaption></figure>
-      <figure class="frame"><img class="contain" src="{{ASSET:sl_iso}}" alt="Isometric STL render of the Rev C CAN shift light carrier"><figcaption><span>CAN · STL angle</span><span>Rev C</span></figcaption></figure>
+      <figure class="frame"><img class="contain" src="{{ASSET:sl_top}}" alt="Color CAD top view of the Rev C CAN shift light carrier"><figcaption><span>CAN · CAD top view</span><span>Rev C</span></figcaption></figure>
+      <figure class="frame">
+        <div class="viewer" id="boardViewer">
+          <canvas id="board3d" aria-label="Interactive 3D model of the Rev C CAN shift light carrier"></canvas>
+          <img class="fallback contain" id="boardFallback" hidden alt="Color CAD view of the Rev C CAN shift light carrier" src="{{ASSET:sl_iso}}">
+          <span class="hint">Drag to turn · scroll to zoom</span>
+          <div class="loading" id="boardLoading">Loading the board from KiCad…</div>
+        </div>
+        <figcaption><span>CAN · interactive 3D</span><span>Rev C</span></figcaption>
+      </figure>
       <figure class="frame"><img src="{{ASSET:wirerun}}" alt="Running the wire up the A-pillar behind the trim, with the dash side panel off"><figcaption><span>Install · the wire run</span><span>A-pillar</span></figcaption></figure>
     </div>
   </div>
@@ -444,7 +455,11 @@
         </div>
       </div>
       <div style="display:grid;gap:18px">
-        <figure class="frame"><img src="{{ASSET:bridge_3d}}" alt="STL render of the Rev C K-line and CAN carrier"><figcaption><span>K-line + CAN · STL</span><span>Rev C</span></figcaption></figure>
+        <figure class="frame product-photo">
+          <img class="rotate-half-turn" src="{{ASSET:bridge_photo}}" width="907" height="815" alt="The red Rev C K-line and CAN board with its XIAO ESP32-S3 installed, partially assembled">
+          <figcaption><span>K-line + CAN · board photo</span><span>Rev C</span></figcaption>
+          <p class="photo-note">Partially assembled board shown. Buck module, microSD socket and terminals still to be fitted.</p>
+        </figure>
         <figure class="frame"><img src="{{ASSET:bridge_pict}}" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
       </div>
     </div>
@@ -705,7 +720,16 @@
     const box = document.getElementById('boardViewer'); const canvas = document.getElementById('board3d');
     const loading = document.getElementById('boardLoading');
     if (typeof THREE === 'undefined' || !THREE.GLTFLoader){ document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); return; }
-    let started=false, visible=false, renderer, scene, camera, controls;
+    let started=false, visible=false, renderer, scene, camera, controls, boardRadius=0;
+    function fitBoard(){
+      if (!boardRadius) return;
+      const vertical = camera.fov * Math.PI / 360;
+      const horizontal = Math.atan(Math.tan(vertical) * camera.aspect);
+      const distance = boardRadius / Math.sin(Math.min(vertical, horizontal)) * 1.08;
+      camera.position.sub(controls.target).setLength(distance).add(controls.target);
+      controls.minDistance = distance * .4; controls.maxDistance = distance * 3;
+      controls.update();
+    }
     function start(){
       started=true;
       try { renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true}); } catch(e){ document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); return; }
@@ -724,9 +748,10 @@
         root.position.sub(c).multiplyScalar(s); root.scale.setScalar(s);
         // glTF is y-up and KiCad's exporter honours it: the board is already flat
         const g = new THREE.Group(); g.add(root); scene.add(g);
+        boardRadius = sz.length() * s / 2; fitBoard();
         loading.classList.add('off');
       }, function(err){ console.error(err); document.getElementById('boardFallback').hidden=false; loading.classList.add('off'); });
-      function size(){ const w=box.clientWidth, h=box.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
+      function size(){ const w=box.clientWidth, h=box.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); fitBoard(); }
       size(); addEventListener('resize', size);
       (function frame(){ if (visible){ controls.update(); renderer.render(scene,camera); } requestAnimationFrame(frame); })();
     }

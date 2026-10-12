@@ -61,28 +61,28 @@ logic changes, change `barState()` in the template to match.
 - **Google Play badge** — Google's own `en_badge_web_generic.png`. Not on the page while the
   logger is in Play closed testing, where the listing is "not found" until you join the testers.
 
-### Rev C model pictures (2026-10-11)
+### Rev C product pictures (2026-10-11)
 
-The CAN carrier gallery now shows top and angled STL renders; the bridge picture
-is rendered from the frozen K-line + CAN Rev C STL. Both are labelled as model
-renders, rather than photographs of assembled hardware.
+The main CAN and K-line + CAN images are Matt's photographs of the actual red
+Rev C boards, kept in `photos/`. The CAN board is assembled; the bridge photo
+is labelled as partially assembled. Its original pixels are retained and CSS
+rotates it 180 degrees for readable board markings.
 
-- CAN source: the committed `dist/assets/board.glb` from `fda212b` (2026-09-03,
-  “Board renders with the real ESP32 models, rev C boards”). Blender converts
-  this existing Rev C geometry to STL for the static pictures. The live viewer
-  continues to use the same GLB.
-- K-line + CAN source: the sibling hardware checkout's
-  `hardware/pcb/rev-c/r53-kline-can-carrier-rev-c.stl`. Its current Rev D outputs
-  are not used.
-- `model-renders.json` records input/output hashes and image dimensions.
-- `tools/render_revc.py` creates the PNGs in the ignored `render/` directory.
-  Run it with Blender's `--background --factory-startup --python` options,
-  then run `pack.py` and `build.py`. Optional arguments after `--` override
-  `--can-glb`, `--kline-stl` and `--output`.
+The CAN gallery keeps a color CAD top view and the interactive 3D model. Both
+come from the committed `dist/assets/board.glb` from `fda212b` (2026-09-03,
+“Board renders with the real ESP32 models, rev C boards”). The Blender helper
+renders that GLB directly, retaining all KiCad materials and part geometry.
+It does not convert through STL, which has no material colors.
 
-The bridge image map uses `render/bridge_iso.png`, so repacking cannot restore
-the older blog illustration. The generated WebP files remain committed under
-`dist/assets/`, and `build.py` updates their cache-busting URLs.
+- `tools/render_revc.py`: run with Blender's `--background --factory-startup
+  --python` options to regenerate the two CAN PNGs in ignored `render/`.
+  Optional arguments after `--`: `--can-glb` and `--output`.
+- `pack.py`: packages the original photos, the color CAN PNGs, and the frozen
+  K-line Rev C `pictures/board-iso.png` for the supplementary bridge render
+  assets. Current Rev D files are not used.
+- `model-renders.json`: records photo/model input hashes and packaged outputs.
+- `build.py`: regenerates hosted and inline pages with content-based asset URLs.
+
 ## Hosting
 
 Nginx on the Hostinger VPS serves `/var/www/r53` at `location ^~ /shiftlight/` inside the
@@ -97,5 +97,5 @@ jsdelivr; the fonts from Google Fonts. Everything else is in `dist/`.
 - Prices: the $125 shift light is confirmed. Housing and bridge are placeholders; the three
   logger unlocks (`appunlock`, `flashunlock`, `oemunlock`) are priced in Play Console and not
   shown yet.
-- Photos of the finished products out of the car, and a clip of the bar going to redline.
+- A photo of the fully assembled K-line + CAN bridge, and a clip of the bar going to redline.
 - Brand: the page says Ryan Racing; the store is Ryan's Designs.
