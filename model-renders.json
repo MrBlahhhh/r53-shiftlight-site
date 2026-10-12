@@ -1,0 +1,48 @@
+{
+  "can": {
+    "model": "dist/assets/board.glb",
+    "sourceCommit": "fda212b (2026-09-03, real ESP32 models, Rev C boards)",
+    "sha256": "0e79ff00a9d893b29a1e9e12c135469b8741521a5c8a03b116861f2b8e7d04c0",
+    "method": "Existing Rev C GLB converted to STL without geometry changes, then rendered."
+  },
+  "kline": {
+    "model": "../R53_Mini_Kline_Canbus_Logger_Shiftlight/hardware/pcb/rev-c/r53-kline-can-carrier-rev-c.stl",
+    "sha256": "b18df0531a8b1cb5369dfb17a0f3b49ea9ccf12d8d0d576c6c38548a2232a76e",
+    "method": "Frozen Rev C STL rendered directly."
+  },
+  "renderer": "Blender 5.2.1 LTS, Cycles CPU, neutral CAD surface, transparent background",
+  "images": {
+    "sl_iso": {
+      "dimensions": [
+        1270,
+        946
+      ],
+      "bytes": 30806,
+      "sha256": "30861b070c1f9b10e8fbf79a367a9c96256dfe4b8bf4a9787942c7af0608e3bb"
+    },
+    "sl_top": {
+      "dimensions": [
+        1030,
+        1130
+      ],
+      "bytes": 28276,
+      "sha256": "6a12edb69d490674e5595d2b5afaed734f10f29dc76bbcf515b60e48ab2c2cec"
+    },
+    "bridge_3d": {
+      "dimensions": [
+        1199,
+        837
+      ],
+      "bytes": 25896,
+      "sha256": "164ea6e167ef841d6b76332eb8c3792a9ed12203014be38a5903316d75f21170"
+    },
+    "br_iso": {
+      "dimensions": [
+        1199,
+        837
+      ],
+      "bytes": 25896,
+      "sha256": "164ea6e167ef841d6b76332eb8c3792a9ed12203014be38a5903316d75f21170"
+    }
+  }
+}

@@ -34,7 +34,7 @@ IMAGES = {
     "app_strip":   (f"{BLOG}/r53-shift-light/app-strip.jpg",              900, 74, False),
     "app_graph":   (f"{BLOG}/r53-shift-light/app-graph.jpg",              900, 74, False),
     "app_can":     (f"{BLOG}/r53-shift-light/app-canbus.jpg",             900, 74, False),
-    "bridge_3d":   (f"{BLOG}/r53-kline-bridge/pcb-3d.png",               1500, 80, False),
+    "bridge_3d":   (f"{RENDER}/bridge_iso.png",                        1600, 90, True),
     "bridge_pict": (f"{BLOG}/r53-kline-bridge/board-pictorial.png",      1500, 80, False),
     "obd":         (f"{BLOG}/r53-kline-bridge/obd2-pin-colours.png",      900, 80, False),
     "log_afr3d":   (f"{BLOG}/r53-logger-august/afr-3d-surface.png",       900, 74, False),
@@ -43,10 +43,10 @@ IMAGES = {
     "log_flash":   (f"{BLOG}/r53-logger-play-store/flash-options-pedal-fan.jpg", 900, 74, False),
     "log_garage":  (f"{BLOG}/r53-logger-august/garage-which-car.png",     900, 74, False),
     "coding":      (f"{BLOG}/r53-coding/race-seats-workflow.jpg",         900, 74, False),
-    "sl_iso":      (f"{RENDER}/shiftlight_iso.png",                      1600, 82, True),
-    "sl_top":      (f"{RENDER}/pcb_top.png",                             1600, 82, True),
+    "sl_iso":      (f"{RENDER}/shiftlight_iso.png",                      1600, 90, True),
+    "sl_top":      (f"{RENDER}/pcb_top.png",                             1600, 90, True),
     "sl_bottom":   (f"{RENDER}/shiftlight_bottom.png",                   1400, 80, True),
-    "br_iso":      (f"{RENDER}/bridge_iso.png",                          1600, 82, True),
+    "br_iso":      (f"{RENDER}/bridge_iso.png",                          1600, 90, True),
     "play_badge":  (f"{RENDER}/google-play-badge.png",                    646, 90, True),
 }
 # lossless: a lossy QR may not scan

@@ -61,6 +61,28 @@ logic changes, change `barState()` in the template to match.
 - **Google Play badge** — Google's own `en_badge_web_generic.png`. Not on the page while the
   logger is in Play closed testing, where the listing is "not found" until you join the testers.
 
+### Rev C model pictures (2026-10-11)
+
+The CAN carrier gallery now shows top and angled STL renders; the bridge picture
+is rendered from the frozen K-line + CAN Rev C STL. Both are labelled as model
+renders, rather than photographs of assembled hardware.
+
+- CAN source: the committed `dist/assets/board.glb` from `fda212b` (2026-09-03,
+  “Board renders with the real ESP32 models, rev C boards”). Blender converts
+  this existing Rev C geometry to STL for the static pictures. The live viewer
+  continues to use the same GLB.
+- K-line + CAN source: the sibling hardware checkout's
+  `hardware/pcb/rev-c/r53-kline-can-carrier-rev-c.stl`. Its current Rev D outputs
+  are not used.
+- `model-renders.json` records input/output hashes and image dimensions.
+- `tools/render_revc.py` creates the PNGs in the ignored `render/` directory.
+  Run it with Blender's `--background --factory-startup --python` options,
+  then run `pack.py` and `build.py`. Optional arguments after `--` override
+  `--can-glb`, `--kline-stl` and `--output`.
+
+The bridge image map uses `render/bridge_iso.png`, so repacking cannot restore
+the older blog illustration. The generated WebP files remain committed under
+`dist/assets/`, and `build.py` updates their cache-busting URLs.
 ## Hosting
 
 Nginx on the Hostinger VPS serves `/var/www/r53` at `location ^~ /shiftlight/` inside the
