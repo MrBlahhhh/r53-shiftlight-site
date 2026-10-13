@@ -1,5 +1,11 @@
 # R53 shift light — product page
 
+## Current to-do review — 2026-10-13
+
+Outstanding: confirm housing/bridge prices, shipping and lead time; supply a fully assembled bridge photo and redline clip; settle Ryan Racing versus Ryan's Designs branding. The page already shows logger unlock prices, so adding them is not pending.
+
+The Android tile still says Version 1.5 while source is 1.11. Match the actual published APK and its requirements before updating the tile; source version alone is not proof that a signed customer release has been published. Keep the VPS live and staging copies aligned as documented below.
+
 The page at **https://ryansdesigns.geekopolis.com/shiftlight/**: the printed housing, the
 assembled CAN shift light, the free companion app, the R53 Logger · Flasher and the K-line + CAN
 bridge, with the housing STL and the carrier board live in Three.js.
@@ -95,7 +101,6 @@ jsdelivr; the fonts from Google Fonts. Everything else is in `dist/`.
 ## Open items
 
 - Prices: the $125 shift light is confirmed. Housing and bridge are placeholders; the three
-  logger unlocks (`appunlock`, `flashunlock`, `oemunlock`) are priced in Play Console and not
-  shown yet.
+  logger unlocks (`appunlock`, `flashunlock`, `oemunlock`) are already shown as $25/$50/$50 in template.html. Housing ($19) and bridge ($189) are visible placeholders, not confirmed prices.
 - A photo of the fully assembled K-line + CAN bridge, and a clip of the bar going to redline.
 - Brand: the page says Ryan Racing; the store is Ryan's Designs.
