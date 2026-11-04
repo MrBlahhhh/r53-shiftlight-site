@@ -185,11 +185,11 @@
   .fitting .step b{color:var(--silk);font-weight:600}
   .btn.red{background:#e8323c;color:#fff;justify-content:center} .btn.red:hover{background:#ff4d57}
   @media (max-width:760px){ .signup .steps,.fitting .steps{grid-template-columns:1fr} }
-  .fit-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+  .fit-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
   .fit-photos .frame{margin:0}
   .fit-photos .frame img{aspect-ratio:4/5;object-fit:cover}
-  @media (min-width:760px){ .pins.wires td:nth-child(2){white-space:nowrap} }
-  @media (max-width:560px){ .pins.wires th,.pins.wires td{padding:9px 8px} }
+  @media (min-width:760px){ .pins.wires td:nth-child(2),.pins.aem td:first-child{white-space:nowrap} }
+  @media (max-width:560px){ .pins.wires th,.pins.wires td,.pins.aem th,.pins.aem td{padding:9px 8px} }
   @media (max-width:560px){ .fit-photos{grid-template-columns:1fr} }
   .polarity{margin-top:22px;padding:16px 20px;border:1px solid rgba(255,176,0,.45);border-left:4px solid var(--a);background:var(--panel);font-size:15px;color:var(--silk2)}
   .polarity b{color:var(--a);font-weight:600}
@@ -477,7 +477,7 @@
       <h2>Five wires in. Three out to the light.</h2>
       <p class="lede">Power, ground and the CAN pair come from behind the access panel on the left end of the dash, on Posi-Taps like the shift light's. The K-line comes off the back of the OBD2 socket. Nothing gets cut, and the car goes back to standard whenever you like.</p>
     </div>
-    <div class="split">
+    <div class="split" style="align-items:start">
       <div>
         <table class="pins wires">
           <thead><tr><th>Terminal</th><th>Wire</th><th>Where</th></tr></thead>
@@ -490,7 +490,8 @@
           </tbody>
         </table>
         <p class="decode" style="margin-top:12px">The harness terminal reads <b>+12 · GND · GND · K · CANH · CANL</b> from the left. Either GND will do. The clamps are 2.54 mm, so use 22–24 AWG wire, not car-gauge.</p>
-        <div class="rule"></div>
+      </div>
+      <div>
         <table class="pins">
           <thead><tr><th>Terminal</th><th>Strip harness</th></tr></thead>
           <tbody>
@@ -500,11 +501,26 @@
           </tbody>
         </table>
         <p class="decode" style="margin-top:12px">The strip harness comes made up, wired to the strip's DIN end.</p>
+        <div class="rule"></div>
+        <!-- AEM 30-0333 X-Series wideband UEGO gauge, connector A per AEM's pinout table. AEM's
+             quick-start drawing labels CAN low plain "brown"; the table says brown / white on pin 3,
+             and plain brown is pin 10, the analog output negative. -->
+        <table class="pins aem">
+          <thead><tr><th>AEM 30-0333</th><th>Signal</th><th>Goes to</th></tr></thead>
+          <tbody>
+            <tr><td><i class="sw" style="background:#2ca24a"></i>green</td><td>pin 4, CAN high</td><td>yellow / black Posi-Tap, with CANH</td></tr>
+            <tr><td><i class="sw" style="background:linear-gradient(90deg,#7a4a22 50%,#eee 50%)"></i>brown / white</td><td>pin 3, CAN low</td><td>yellow / brown Posi-Tap, with CANL</td></tr>
+            <tr><td><i class="sw" style="background:#d81e1e"></i>red</td><td>pin 1, switched +12 V</td><td>through a 5 A fuse</td></tr>
+            <tr><td><i class="sw" style="background:#111"></i>black</td><td>pin 2, ground</td><td>body stud</td></tr>
+          </tbody>
+        </table>
+        <p class="decode" style="margin-top:12px">The X-Series wideband gauge, connector A. CAN low is <b>brown / white</b>. Plain brown is pin 10, the analog output, and isn't CAN. AEM doesn't supply the fuse.</p>
       </div>
-      <div class="fit-photos">
-        <figure class="frame"><img src="{{ASSET:powertap}}" alt="Posi-Taps on the switched feed behind the left dash end panel, with ring terminals on the body stud" loading="lazy"><figcaption><span>Switched feed</span><span>body stud</span></figcaption></figure>
-        <figure class="frame"><img src="{{ASSET:cantap}}" alt="A Posi-Tap on each wire of the twisted yellow CAN pair in the main harness" loading="lazy"><figcaption><span>The CAN pair</span><span>twisted yellow</span></figcaption></figure>
-      </div>
+    </div>
+    <div class="fit-photos">
+      <figure class="frame"><img src="{{ASSET:powertap}}" alt="Posi-Taps on the switched feed behind the left dash end panel, with ring terminals on the body stud" loading="lazy"><figcaption><span>Switched feed</span><span>body stud</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:cantap}}" alt="A Posi-Tap on each wire of the twisted yellow CAN pair in the main harness" loading="lazy"><figcaption><span>The CAN pair</span><span>twisted yellow</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:klinetap}}" alt="The back of the OBD2 socket with pins 7 and 8 bridged and one wire taken off to the bridge's K terminal" loading="lazy"><figcaption><span>K-line</span><span>OBD2 pins 7 + 8 bridged</span></figcaption></figure>
     </div>
     <div class="fitting">
       <div class="steps">
@@ -522,7 +538,7 @@
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">4</span><h3>AEM wideband</h3></div>
-          <p>Running an AEM gauge? Its CAN high and CAN low go into the same two Posi-Taps as the board's, high with high and low with low. The bridge reads its lambda off that pair.</p>
+          <p>Running the AEM 30-0333? Its <b>green</b> (CAN high) goes into the yellow / black Posi-Tap with the board's CANH, and its <b>brown / white</b> (CAN low) into the yellow / brown one with CANL. The bridge reads its lambda off that pair.</p>
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">5</span><h3>K-line</h3></div>
@@ -534,7 +550,7 @@
         </div>
       </div>
     </div>
-    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL, at the board and at the AEM gauge alike. +12 on +12, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
+    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL at the board. At the AEM, green is high and goes with yellow / black, brown / white is low and goes with yellow / brown. Not plain brown: that's the AEM's analog output. +12 on +12, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
     <p class="note">The bridge only listens, so a swapped pair on the board just leaves it deaf. The AEM gauge transmits on that bus, so get its pair right the first time.</p>
   </div>
 </section>
