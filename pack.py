@@ -34,6 +34,7 @@ IMAGES = {
     "bench":       (f"{BLOG}/r53-shift-light/shift-light-bench.jpg",     1200, 72, False),
     "wirerun":     (f"{BLOG}/r53-shift-light/install-wire-run.jpg",      1200, 72, False),
     "powertap":    (f"{BLOG}/r53-shift-light/install-power-tap.jpg",     1200, 72, False),
+    "cantap":      (f"{BLOG}/r53-shift-light/install-can-tap.jpg",       1200, 72, False),
     "app_thr":     (f"{BLOG}/r53-shift-light/app-thresholds.jpg",         900, 74, False),
     "app_strip":   (f"{BLOG}/r53-shift-light/app-strip.jpg",              900, 74, False),
     "app_graph":   (f"{BLOG}/r53-shift-light/app-graph.jpg",              900, 74, False),

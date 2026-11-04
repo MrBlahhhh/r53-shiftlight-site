@@ -173,16 +173,26 @@
   @media (max-width:560px){ .pricing{grid-template-columns:1fr} }
   .note{font-family:var(--mono);font-size:12px;color:var(--mute);letter-spacing:.04em;margin-top:16px}
   /* logger signup: the blog's "Get it" step cards, in the blog's red (#e8323c) */
-  .signup{margin-top:22px}
+  /* the bridge's fitting steps reuse the same cards */
+  .signup,.fitting{margin-top:22px}
   /* scoped: the ladder's colour bars are also .step */
-  .signup .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
-  .signup .step{display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid rgba(232,50,60,.35);border-radius:4px;background:var(--panel);box-shadow:0 0 24px rgba(232,50,60,.08)}
-  .signup .step-head{display:flex;align-items:center;gap:12px}
-  .signup .step-num{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:50%;background:#e8323c;color:#fff;font-family:var(--mono);font-weight:700}
-  .signup .step h3{font-size:clamp(22px,2vw,28px)}
-  .signup .step p{font-size:15px;color:var(--silk2);flex:1}
+  .signup .steps,.fitting .steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+  .signup .step,.fitting .step{display:flex;flex-direction:column;gap:12px;padding:20px;border:1px solid rgba(232,50,60,.35);border-radius:4px;background:var(--panel);box-shadow:0 0 24px rgba(232,50,60,.08)}
+  .signup .step-head,.fitting .step-head{display:flex;align-items:center;gap:12px}
+  .signup .step-num,.fitting .step-num{display:grid;place-items:center;width:32px;height:32px;flex:none;border-radius:50%;background:#e8323c;color:#fff;font-family:var(--mono);font-weight:700}
+  .signup .step h3,.fitting .step h3{font-size:clamp(22px,2vw,28px)}
+  .signup .step p,.fitting .step p{font-size:15px;color:var(--silk2);flex:1}
+  .fitting .step b{color:var(--silk);font-weight:600}
   .btn.red{background:#e8323c;color:#fff;justify-content:center} .btn.red:hover{background:#ff4d57}
-  @media (max-width:760px){ .signup .steps{grid-template-columns:1fr} }
+  @media (max-width:760px){ .signup .steps,.fitting .steps{grid-template-columns:1fr} }
+  .fit-photos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:28px}
+  .fit-photos .frame{margin:0}
+  .fit-photos .frame img{aspect-ratio:4/5;object-fit:cover}
+  @media (min-width:760px){ .pins.wires td:nth-child(2){white-space:nowrap} }
+  @media (max-width:560px){ .pins.wires th,.pins.wires td{padding:9px 8px} }
+  @media (max-width:560px){ .fit-photos{grid-template-columns:1fr} }
+  .polarity{margin-top:22px;padding:16px 20px;border:1px solid rgba(255,176,0,.45);border-left:4px solid var(--a);background:var(--panel);font-size:15px;color:var(--silk2)}
+  .polarity b{color:var(--a);font-weight:600}
 
   /* fit + faq */
   .fit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -211,7 +221,7 @@
   <div class="wrap">
     <a class="mark" href="#top"><i><b></b><b></b><b></b><b></b></i>RYAN RACING</a>
     <nav>
-      <a href="#housing">Housing</a><a href="#light">Shift light</a><a href="#app">App</a><a href="#logger">Logger</a><a href="#bridge">Bridge</a><a href="#pricing">Pricing</a>
+      <a href="#housing">Housing</a><a href="#light">Shift light</a><a href="#app">App</a><a href="#logger">Logger</a><a href="#bridge">Bridge</a><a href="#install">Install</a><a href="#pricing">Pricing</a>
     </nav>
     <a class="btn solid sm" href="#pricing">Order</a>
   </div>
@@ -426,7 +436,7 @@
     <div class="head">
       <p class="eyebrow">05 · Top of the range · K-line + CAN bridge</p>
       <h2>The shift light grew a second job. Then a third.</h2>
-      <p class="lede">One board in the footwell that reads the Siemens EMS2000 over K-line, listens to the CAN bus, and drives the shift light. It plugs into the OBD2 socket and ships raw ECU blocks to your phone over Bluetooth, where the logger does the decoding. It is the best input the logger can have: wideband, CAN channels and the shift light, all in the same time-aligned log.</p>
+      <p class="lede">One board in the footwell that reads the Siemens EMS2000 over K-line, listens to the CAN bus, and drives the shift light. It taps the K-line behind the OBD2 socket and the CAN pair behind the dash, and ships raw ECU blocks to your phone over Bluetooth, where the logger does the decoding. It is the best input the logger can have: wideband, CAN channels and the shift light, all in the same time-aligned log.</p>
     </div>
     <div class="split rev">
       <div>
@@ -437,19 +447,9 @@
           <li><b>XIAO ESP32-S3.</b> 8 MB flash, 8 MB PSRAM, BLE to the phone.</li>
         </ul>
         <div class="rule"></div>
-        <table class="pins">
-          <thead><tr><th>OBD2 pin</th><th>Wire</th><th>Signal</th></tr></thead>
-          <tbody>
-            <tr><td>4</td><td><i class="sw" style="background:#f07a1a"></i>orange</td><td>chassis ground</td></tr>
-            <tr><td>5</td><td><i class="sw" style="background:#7fc6ff"></i>light blue</td><td>signal ground</td></tr>
-            <tr><td>6</td><td><i class="sw" style="background:#2ca24a"></i>green</td><td>CAN H</td></tr>
-            <tr><td>7</td><td><i class="sw" style="background:#111"></i>black</td><td>K-line</td></tr>
-            <tr><td>14</td><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#eee 50%)"></i>green / white</td><td>CAN L</td></tr>
-            <tr><td>16</td><td><i class="sw" style="background:#d81e1e"></i>red</td><td>battery +12 V</td></tr>
-          </tbody>
-        </table>
+        <p class="decode">Five wires to the car and three to the light, all under screw clamps. <a href="#install">How it goes in</a>.</p>
         <div class="buyrow" style="margin-top:22px">
-          <span class="price">$189<small>bridge · OBD2 pigtail</small></span>
+          <span class="price">$189<small>bridge</small></span>
           <a class="btn solid" href="#pricing">Add to order</a>
           <a class="btn ghost" href="https://mrblahhhh.github.io/car/tech/2026/08/27/r53-kline-canbus-bridge-hardware.html" target="_blank" rel="noopener">The hardware write-up</a>
         </div>
@@ -463,6 +463,79 @@
         <figure class="frame"><img src="{{ASSET:bridge_pict}}" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ============ INSTALL ============ -->
+<!-- Rev C bridge fitting, as Matt fits it (2026-11-03): power, ground and CAN on Posi-Taps behind the
+     left dash end panel, K-line off OBD2 pins 7 + 8 bridged, AEM gauge on the same CAN taps.
+     Terminal names are rev C's silkscreen: J1 +12 GND GND K CANH CANL, J4 +5V DATA GND. -->
+<section class="block" id="install">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">06 · Fitting the bridge · Rev C</p>
+      <h2>Five wires in. Three out to the light.</h2>
+      <p class="lede">Power, ground and the CAN pair come from behind the access panel on the left end of the dash, on Posi-Taps like the shift light's. The K-line comes off the back of the OBD2 socket. Nothing gets cut, and the car goes back to standard whenever you like.</p>
+    </div>
+    <div class="split">
+      <div>
+        <table class="pins wires">
+          <thead><tr><th>Terminal</th><th>Wire</th><th>Where</th></tr></thead>
+          <tbody>
+            <tr><td>+12</td><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#2f6fe0 50%)"></i>green / blue</td><td>switched 12 V, terminal 15, X11177 pin 16</td></tr>
+            <tr><td>GND</td><td><i class="sw" style="background:#7a4a22"></i>brown</td><td>body stud</td></tr>
+            <tr><td>K</td><td>one wire</td><td>OBD2 socket, pins 7 and 8 bridged</td></tr>
+            <tr><td>CANH</td><td><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#111 50%)"></i>yellow / black</td><td>X11177 pin 11</td></tr>
+            <tr><td>CANL</td><td><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#7a4a22 50%)"></i>yellow / brown</td><td>X11177 pin 24</td></tr>
+          </tbody>
+        </table>
+        <p class="decode" style="margin-top:12px">The harness terminal reads <b>+12 · GND · GND · K · CANH · CANL</b> from the left. Either GND will do. The clamps are 2.54 mm, so use 22–24 AWG wire, not car-gauge.</p>
+        <div class="rule"></div>
+        <table class="pins">
+          <thead><tr><th>Terminal</th><th>Strip harness</th></tr></thead>
+          <tbody>
+            <tr><td>+5V</td><td><i class="sw" style="background:#d81e1e"></i>red</td></tr>
+            <tr><td>DATA</td><td><i class="sw" style="background:#f2d21b"></i>yellow</td></tr>
+            <tr><td>GND</td><td><i class="sw" style="background:#111"></i>black</td></tr>
+          </tbody>
+        </table>
+        <p class="decode" style="margin-top:12px">The strip harness comes made up, wired to the strip's DIN end.</p>
+      </div>
+      <div class="fit-photos">
+        <figure class="frame"><img src="{{ASSET:powertap}}" alt="Posi-Taps on the switched feed behind the left dash end panel, with ring terminals on the body stud" loading="lazy"><figcaption><span>Switched feed</span><span>body stud</span></figcaption></figure>
+        <figure class="frame"><img src="{{ASSET:cantap}}" alt="A Posi-Tap on each wire of the twisted yellow CAN pair in the main harness" loading="lazy"><figcaption><span>The CAN pair</span><span>twisted yellow</span></figcaption></figure>
+      </div>
+    </div>
+    <div class="fitting">
+      <div class="steps">
+        <div class="step">
+          <div class="step-head"><span class="step-num">1</span><h3>Open up</h3></div>
+          <p>Key out. The access panel on the left end of the dash comes off by hand. Everything but the K-line is behind it.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">2</span><h3>Power and ground</h3></div>
+          <p>Posi-Tap the <b>green / blue</b> switched feed and run it to <b>+12</b>. Ground goes on a ring terminal to the body stud and into either <b>GND</b>.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">3</span><h3>The CAN pair</h3></div>
+          <p>The twisted yellow pair. <b>Yellow / black</b> is CAN high, to <b>CANH</b>. <b>Yellow / brown</b> is CAN low, to <b>CANL</b>. One Posi-Tap on each.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">4</span><h3>AEM wideband</h3></div>
+          <p>Running an AEM gauge? Its CAN high and CAN low go into the same two Posi-Taps as the board's, high with high and low with low. The bridge reads its lambda off that pair.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">5</span><h3>K-line</h3></div>
+          <p>At the back of the OBD2 socket, bridge <b>pins 7 and 8</b> together and run one wire from the bridge to <b>K</b>.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">6</span><h3>Light and check</h3></div>
+          <p>Strip harness to <b>+5V</b>, <b>DATA</b> and <b>GND</b>, then up the column like the shift light. Start the car and blip it. The bar follows the revs off CAN with no phone connected.</p>
+        </div>
+      </div>
+    </div>
+    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL, at the board and at the AEM gauge alike. +12 on +12, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
+    <p class="note">The bridge only listens, so a swapped pair on the board just leaves it deaf. The AEM gauge transmits on that bus, so get its pair right the first time.</p>
   </div>
 </section>
 
