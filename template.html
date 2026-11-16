@@ -295,7 +295,7 @@
       <li><a href="#light"><span class="k">Bolt it in</span><span class="t">Shift light</span><span class="p">Carrier board, module, strip and housing, assembled and tested.</span></a><span class="step"></span></li>
       <li><a href="#app"><span class="k">Free</span><span class="t">Companion app</span><span class="p">Android and iPhone. Thresholds, colours, a live CAN monitor.</span></a><span class="step"></span></li>
       <li><a href="#logger"><span class="k">Want more</span><span class="t">Logger · Flasher</span><span class="p">Log, analyse and flash the EMS2000. Three Play unlocks. Runs on a K+DCAN cable; runs better on the bridge.</span></a><span class="step"></span></li>
-      <li><a href="#bridge"><span class="k">Top of the range</span><span class="t">K-line + CAN bridge</span><span class="p">Reads the ECU, watches the bus, runs the light. One board, one OBD2 plug.</span></a><span class="step"></span></li>
+      <li><a href="#bridge"><span class="k">Top of the range</span><span class="t">K-line + CAN bridge</span><span class="p">Reads the ECU, watches the bus, runs the light. One board, five wires.</span></a><span class="step"></span></li>
     </ol>
   </div>
 </section>
@@ -407,12 +407,12 @@
       <div style="display:grid;gap:10px;align-content:center">
         <div class="ctas"><a class="btn solid" href="https://mrblahhhh.github.io/car/tech/2026/07/11/r53-esp32-shift-light.html#getting-the-app" target="_blank" rel="noopener">Android · get the APK</a>
         <a class="btn ghost" href="https://logs.geekopolis.com/shiftlight/?v=20261007" target="_blank" rel="noopener">iPhone · open in Bluefy</a></div>
-        <span class="decode">Version 1.5 · Android 8.0 or newer · about 1.2 MB · one permission (Nearby devices), no internet permission at all.</span>
+        <span class="decode">Version 1.12 · Android 8.0 or newer · about 1.3 MB · one permission (Nearby devices). It goes online only to fetch a firmware update you ask for.</span>
       </div>
     </div>
     <p class="note">iPhone: Safari has never shipped Web Bluetooth, so the app runs in <b>Bluefy</b>, a free browser that bridges it. Same board, same screens, nothing to install from the App Store.</p>
     <div class="ctas" style="margin-top:22px"><a class="btn ghost" href="https://mrblahhhh.github.io/esp32-shift-light-R53-mini/" target="_blank" rel="noopener">Update the firmware · web flasher</a></div>
-    <p class="note">Firmware updates run in the browser. Plug the shift light into a computer over USB-C and open the flasher in Chrome or Edge. It reads which board is on the port, checks every download before it writes, and an update keeps the settings you saved.</p>
+    <p class="note">The shift light updates from the Android app over Bluetooth: it finds the newest signed build for your board and sends it across, and the board keeps the settings you saved. A board older than build 5 needs one USB update first. The browser flasher does the rest: plug the board into a computer over USB-C and open it in Chrome or Edge. It reads which board is on the port and checks every download before it writes. That's how the K-line + CAN bridge updates, and how iPhone owners update either board.</p>
   </div>
 </section>
 
@@ -498,9 +498,7 @@
           <img class="rotate-half-turn" src="{{ASSET:bridge_photo}}" width="907" height="815" alt="The red Rev C K-line and CAN board with its XIAO ESP32-S3 installed, partially assembled">
           <figcaption><span>K-line + CAN · board photo</span><span>Rev C</span></figcaption>
           <p class="photo-note">Partially assembled board shown. Buck module, microSD socket and terminals still to be fitted.</p>
-        </figure>
-        <figure class="frame"><img src="{{ASSET:bridge_pict}}" alt="Pictorial wiring diagram of the bridge with every net in its own colour and the six car-side wires in the OBD2 pigtail colours"><figcaption><span>Every net in its own colour</span><span>a bridge is never a join</span></figcaption></figure>
-      </div>
+        </figure>      </div>
     </div>
   </div>
 </section>
@@ -679,7 +677,7 @@
       </article>
       <article class="hot">
         <div class="k">Top of the range</div><div class="t">Bridge</div>
-        <ul><li class="base">Shift light</li><li>K-line transceiver</li><li>CAN listen-only</li><li>OBD2 pigtail, wired</li><li>The logger's best input</li></ul>
+        <ul><li class="base">Shift light</li><li>K-line transceiver</li><li>CAN listen-only</li><li>Taps in behind the dash, no cutting</li><li>The logger's best input</li></ul>
         <div class="price">$189</div>
         <a class="btn solid" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20K-line%20%2B%20CAN%20bridge">Email to order</a>
       </article>
@@ -698,7 +696,7 @@
     <div class="fit">
       <div><div class="n">2002–06</div><p>First-generation MINI Cooper S, chassis R53, the supercharged one. Siemens EMS2000 ECU.</p></div>
       <div><div class="n">0x316</div><p>The CAN id the RPM rides on. The id and the divisor are settings, so a different car is a config change, not a rebuild.</p></div>
-      <div><div class="n">6 of 16</div><p>OBD2 pins the bridge uses. CAN is run to pins 6 and 14 so the socket is the single service point.</p></div>
+      <div><div class="n">7 + 8</div><p>The OBD2 pins the bridge uses, bridged for the K-line. Power and CAN come off the dash loom, on taps.</p></div>
     </div>
     <div style="margin-top:40px">
       <details><summary>Does the light work without the phone?</summary><p>Yes. The strip runs from CAN with no phone and no app. The app only configures and observes. Thresholds saved to the board survive power-off.</p></details>

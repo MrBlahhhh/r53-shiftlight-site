@@ -4,7 +4,7 @@
 
 Outstanding: confirm housing/bridge prices, shipping and lead time; supply a fully assembled bridge photo and redline clip; settle Ryan Racing versus Ryan's Designs branding. The page already shows logger unlock prices, so adding them is not pending.
 
-The Android tile still says Version 1.5 while source is 1.11. Match the actual published APK and its requirements before updating the tile; source version alone is not proof that a signed customer release has been published. Keep the VPS live and staging copies aligned as documented below.
+The Android tile says 1.12, the APK on the blog since 2026-11-15. Match the actual published APK and its requirements before updating the tile; source version alone is not proof that a signed customer release has been published. Keep the VPS live and staging copies aligned as documented below.
 
 The page at **https://ryansdesigns.geekopolis.com/shiftlight/**: the printed housing, the
 assembled CAN shift light, the free companion app, the R53 Logger · Flasher and the K-line + CAN
