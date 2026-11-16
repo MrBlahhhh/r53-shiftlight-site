@@ -60,9 +60,13 @@ IMAGES = {
 # anticlockwise makes the silkscreen pin names read left to right with the terminals down the
 # left edge, and the crop keeps the terminals, the buck and the XIAO. The terminal callout in
 # template.html places its pins as percentages of this crop, so changing it moves them.
-PREP = {"bridge_term": lambda im: im.rotate(90, expand=True).crop((380, 700, 3072, 2960))}
+PREP = {"bridge_term": lambda im: im.rotate(90, expand=True).crop((380, 700, 3072, 2960)),
+        # the screenshot's top 3 rows are the clipped tail of a glyph from the line above in AEM's PDF
+        "aem_pinout": lambda im: im.crop((0, 4, im.width, im.height))}
 # lossless: a lossy QR may not scan
-PNGS = {"app_qr": f"{BLOG}/r53-shift-light/app-qr.png"}
+PNGS = {"app_qr": f"{BLOG}/r53-shift-light/app-qr.png",
+        # AEM's connector A table from the 30-0300 instructions, Matt's screenshot; small type, so lossless
+        "aem_pinout": f"{PHOTOS}/aem-30-0300-connector-a.png"}
 MODELS = {"stl": (STL, "stl"), "glb": (f"{RENDER}/shiftlight.glb", "glb")}
 
 
@@ -86,7 +90,12 @@ def main():
         out[key] = {"uri": "data:image/webp;base64," + base64.b64encode(data).decode(), "ext": "webp"}
         print(f"{key:12s} {im.size[0]:5d}x{im.size[1]:<5d} {len(data)/1024:6.0f} KB")
     for key, path in PNGS.items():
-        data = open(path, "rb").read()
+        if key in PREP:
+            buf = io.BytesIO()
+            PREP[key](Image.open(path).convert("RGB")).save(buf, "PNG", optimize=True)
+            data = buf.getvalue()
+        else:
+            data = open(path, "rb").read()
         open(os.path.join(OUT, key + ".png"), "wb").write(data)
         out[key] = {"uri": "data:image/png;base64," + base64.b64encode(data).decode(), "ext": "png"}
     for key, (path, ext) in MODELS.items():

@@ -193,6 +193,10 @@
   @media (max-width:560px){ .fit-photos{grid-template-columns:1fr} }
   .polarity{margin-top:22px;padding:16px 20px;border:1px solid rgba(255,176,0,.45);border-left:4px solid var(--a);background:var(--panel);font-size:15px;color:var(--silk2)}
   .polarity b{color:var(--a);font-weight:600}
+  /* AEM's own connector A table, shown at no more than its native width so the type stays sharp */
+  .aem-doc{margin:28px 0 0;max-width:1069px}
+  .aem-doc a{display:block}
+  .aem-doc img{display:block;height:auto;background:#fff}
   /* terminal callout: Matt's photo of the fitted rev C terminals, a leader line from each screw to
      what goes in it. Under 900px the lines go and the numbers on the photo match the list. */
   .termmap{margin:0 0 34px}
@@ -477,7 +481,7 @@
       <div>
         <ul class="list">
           <li><b>K-line, properly.</b> An ST L9637D transceiver behind a 1 kΩ 1 W pull-up and a 1.5KE27A clamp. DS2 at 9600 baud, 8E1, the ECU's native dialect.</li>
-          <li><b>CAN, listen-only.</b> RPM, throttle, coolant and road speed off the car's bus, plus AEMnet lambda from a wideband gauge on the same pair. It never ACKs, so it cannot disturb the bus.</li>
+          <li><b>CAN, listen-only.</b> RPM, throttle, coolant and road speed off the car's bus, plus AEMnet lambda from an AEM 30-0300 wideband gauge on the same pair. It never ACKs, so it cannot disturb the bus.</li>
           <li><b>The shift light, still.</b> Same eight LEDs, straight off CAN RPM. Works with no phone connected and no app running.</li>
           <li><b>XIAO ESP32-S3.</b> 8 MB flash, 8 MB PSRAM, BLE to the phone.</li>
         </ul>
@@ -530,8 +534,8 @@
             <li data-pin="5"><span class="tm-n">5</span><span class="tm-t"><b>GND</b><span class="wire"><i class="sw" style="background:#7a4a22"></i>brown</span></span><span class="to">ring terminal on the body stud</span></li>
             <li data-pin="6" class="spare"><span class="tm-n">6</span><span class="tm-t"><b>GND</b><span class="wire">spare</span></span><span class="to">either GND will do; leave one empty</span></li>
             <li data-pin="7"><span class="tm-n">7</span><span class="tm-t"><b>K</b><span class="wire">one wire</span></span><span class="to">back of the OBD2 socket, pins 7 + 8 bridged</span></li>
-            <li data-pin="8"><span class="tm-n">8</span><span class="tm-t"><b>CANH</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#111 50%)"></i>yellow / black</span></span><span class="to">X11177 pin 11 · the AEM's green shares this tap</span></li>
-            <li data-pin="9"><span class="tm-n">9</span><span class="tm-t"><b>CANL</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#7a4a22 50%)"></i>yellow / brown</span></span><span class="to">X11177 pin 24 · the AEM's brown / white shares this tap</span></li>
+            <li data-pin="8"><span class="tm-n">8</span><span class="tm-t"><b>CANH</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#111 50%)"></i>yellow / black</span></span><span class="to">X11177 pin 11 · the AEM's white / black shares this tap</span></li>
+            <li data-pin="9"><span class="tm-n">9</span><span class="tm-t"><b>CANL</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#7a4a22 50%)"></i>yellow / brown</span></span><span class="to">X11177 pin 24 · the AEM's green / black shares this tap</span></li>
           </ol>
         </div>
         <div class="tm-photo">
@@ -577,21 +581,27 @@
         </table>
         <p class="decode" style="margin-top:12px">The strip harness comes made up, wired to the strip's DIN end.</p>
         <div class="rule"></div>
-        <!-- AEM 30-0333 X-Series wideband UEGO gauge, connector A per AEM's pinout table. AEM's
-             quick-start drawing labels CAN low plain "brown"; the table says brown / white on pin 3,
-             and plain brown is pin 10, the analog output negative. -->
+        <!-- AEM 30-0300 X-Series wideband UEGO gauge, the one in Matt's car and the one the bridge
+             reads (2026-11-15; the page said 30-0333 before). Connector A per AEM's own table, shown
+             below as aem_pinout: 1 red switched 12 V (5 A fuse), 2 black ground, 3 green / black
+             AEMnet- CANL, 4 white / black AEMnet+ CANH, 5 blue RS-232, 9 white and 10 brown the
+             0-5 V analog output. The firmware README has the same CAN colours from AEM doc 10-0300. -->
         <table class="pins aem">
-          <thead><tr><th>AEM 30-0333</th><th>Signal</th><th>Goes to</th></tr></thead>
+          <thead><tr><th>AEM 30-0300</th><th>Signal</th><th>Goes to</th></tr></thead>
           <tbody>
-            <tr><td><i class="sw" style="background:#2ca24a"></i>green</td><td>pin 4, CAN high</td><td>yellow / black Posi-Tap, with CANH</td></tr>
-            <tr><td><i class="sw" style="background:linear-gradient(90deg,#7a4a22 50%,#eee 50%)"></i>brown / white</td><td>pin 3, CAN low</td><td>yellow / brown Posi-Tap, with CANL</td></tr>
             <tr><td><i class="sw" style="background:#d81e1e"></i>red</td><td>pin 1, switched +12 V</td><td>through a 5 A fuse</td></tr>
             <tr><td><i class="sw" style="background:#111"></i>black</td><td>pin 2, ground</td><td>body stud</td></tr>
+            <tr><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#111 50%)"></i>green / black</td><td>pin 3, CAN low</td><td>yellow / brown Posi-Tap, with CANL</td></tr>
+            <tr><td><i class="sw" style="background:linear-gradient(90deg,#eee 50%,#111 50%)"></i>white / black</td><td>pin 4, CAN high</td><td>yellow / black Posi-Tap, with CANH</td></tr>
           </tbody>
         </table>
-        <p class="decode" style="margin-top:12px">The X-Series wideband gauge, connector A. CAN low is <b>brown / white</b>. Plain brown is pin 10, the analog output, and isn't CAN. AEM doesn't supply the fuse.</p>
+        <p class="decode" style="margin-top:12px">The X-Series wideband gauge in our car, connector A. Both CAN wires carry a black tracer: <b>white / black</b> is high, <b>green / black</b> is low. Plain white and plain brown, pins 9 and 10, are the 0–5 V analog output and aren't CAN. AEM's table calls for the 5 A fuse.</p>
       </div>
     </div>
+    <figure class="frame aem-doc">
+      <a href="{{ASSET:aem_pinout}}" target="_blank" rel="noopener"><img src="{{ASSET:aem_pinout}}" width="1047" height="464" loading="lazy" alt="AEM's connector A table for the 30-0300 gauge: pin 1 red, switched 12 V through a 5 A fuse; pin 2 black, power ground; pin 3 green / black, AEMnet minus, CAN low; pin 4 white / black, AEMnet plus, CAN high; pin 5 blue, serial RS-232 output; pins 6 to 8 not used; pin 9 white, 0 to 5 V analog output positive; pin 10 brown, analog output negative."></a>
+      <figcaption><span>AEM 30-0300 · connector A</span><span>from AEM's instructions</span></figcaption>
+    </figure>
     <!-- The asset keys follow the blog's file names, which have the two shots the wrong way round:
          cantap (install-can-tap.jpg) is the switched-feed tap on the green wire, with the CAN pair's
          taps below it; powertap (install-power-tap.jpg) is the CAN pair and the body stud. Matt,
@@ -617,7 +627,7 @@
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">4</span><h3>AEM wideband</h3></div>
-          <p>Running the AEM 30-0333? Its <b>green</b> (CAN high) goes into the yellow / black Posi-Tap with the board's CANH, and its <b>brown / white</b> (CAN low) into the yellow / brown one with CANL. The bridge reads its lambda off that pair.</p>
+          <p>Running the AEM 30-0300, the gauge in our car? Its <b>white / black</b> (CAN high) goes into the yellow / black Posi-Tap with the board's CANH, and its <b>green / black</b> (CAN low) into the yellow / brown one with CANL. The bridge reads its lambda off that pair.</p>
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">5</span><h3>K-line</h3></div>
@@ -629,7 +639,7 @@
         </div>
       </div>
     </div>
-    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL at the board. At the AEM, green is high and goes with yellow / black, brown / white is low and goes with yellow / brown. Not plain brown: that's the AEM's analog output. +12 V on +12V, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
+    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL at the board. At the AEM, white / black is high and goes with yellow / black, green / black is low and goes with yellow / brown. Not plain white or plain brown: that's the AEM's analog output. +12 V on +12V, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
     <p class="note">The bridge only listens, so a swapped pair on the board just leaves it deaf. The AEM gauge transmits on that bus, so get its pair right the first time.</p>
   </div>
 </section>
