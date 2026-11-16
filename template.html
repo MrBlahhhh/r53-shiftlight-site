@@ -185,6 +185,10 @@
   .fitting .step b{color:var(--silk);font-weight:600}
   .btn.red{background:#e8323c;color:#fff;justify-content:center} .btn.red:hover{background:#ff4d57}
   @media (max-width:760px){ .signup .steps,.fitting .steps{grid-template-columns:1fr} }
+  .getplay{display:flex;align-items:center;flex-wrap:wrap;gap:8px 20px;margin-top:22px}
+  .getplay a{display:block;flex:none}
+  .getplay img{display:block;width:200px;height:auto}
+  .getplay .decode{flex:1 1 260px}
   .fit-photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
   .fit-photos .frame{margin:0}
   .fit-photos .frame img{aspect-ratio:4/5;object-fit:cover}
@@ -437,33 +441,17 @@
     </div>
     <p class="decode" style="margin-top:14px">ECU write needs the App unlock plus either add-on. Flash write needs the facelift silver-cover ECU; logging works on the other boxes. Reads and writes are done key on, engine off, on a battery charger.</p>
     <div class="buyrow" style="margin-top:28px">
-      <a class="btn red" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join the tester group</a>
+      <a class="btn red" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Get it on Google Play</a>
       <span class="price">$25<small>app unlock</small></span>
       <span class="price">$50<small>flash unlock</small></span>
       <span class="price">$50<small>factory software</small></span>
       <span class="decode">Works with a K+DCAN USB cable and USB-C OTG. Works better with the bridge: wideband AFR, CAN channels and the shift light in one log.</span>
     </div>
-    <!-- Play closed testing: the store listing is "not found" to anyone who has not done steps 1 and 2.
-         Steps as the blog gives them in 2026-07-24-r53-logger-play-store and 2026-08-18-r53-logger-august-update. -->
-    <div class="signup" id="logger-signup">
-      <p class="decode">In Google Play closed testing, so it does not show up in a Play search. Three steps, all with the Google account on your Android phone:</p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-head"><span class="step-num">1</span><h3>Join the group</h3></div>
-          <p>Open to anyone, no approval. Tap Join group.</p>
-          <a class="btn red" href="https://groups.google.com/g/r53-logger-testers" target="_blank" rel="noopener">Join group</a>
-        </div>
-        <div class="step">
-          <div class="step-head"><span class="step-num">2</span><h3>Opt in on Play</h3></div>
-          <p>Tap Become a tester.</p>
-          <a class="btn red" href="https://play.google.com/apps/testing/com.geekopolis.r53logger" target="_blank" rel="noopener">Become a tester</a>
-        </div>
-        <div class="step">
-          <div class="step-head"><span class="step-num">3</span><h3>Install</h3></div>
-          <p>Install from Play on your phone. If it says the app is not found, Play is on a different Google account or has not caught up yet; give it a few minutes.</p>
-          <a class="btn red" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Open in Play</a>
-        </div>
-      </div>
+    <!-- Public on Google Play as "R53 Logger Flasher" since 2026-11-15 (Matt); the closed-testing
+         group and opt-in steps are gone. Free to install, the three unlocks are in-app purchases. -->
+    <div class="getplay" id="logger-get">
+      <a href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener"><img src="{{ASSET:play_badge}}" width="564" height="168" alt="Get it on Google Play"></a>
+      <p class="decode"><b>R53 Logger Flasher</b> on Google Play. Free to install; the three unlocks are in-app purchases.</p>
     </div>
     <p class="note">Off-road and competition use. An ECU flash can brick a car; the app backs up the stock BIN first and refuses to write on a shared wire. <b>R53 Coding</b>, the module-coding companion, is a separate app with its own unlock.</p>
   </div>
@@ -673,7 +661,7 @@
         <div class="k">Want more</div><div class="t">Logger · Flasher</div>
         <ul><li class="base">K+DCAN cable or the bridge</li><li>App unlock $25: log, diagnose, back up</li><li>Flash unlock $50: tune options</li><li>Factory software $50: US S, JCW, GP1</li></ul>
         <div class="price">$75<small>app + flash · $125 with factory software</small></div>
-        <a class="btn ghost" href="#logger-signup">Join the testers</a>
+        <a class="btn ghost" href="https://play.google.com/store/apps/details?id=com.geekopolis.r53logger" target="_blank" rel="noopener">Get it on Google Play</a>
       </article>
       <article class="hot">
         <div class="k">Top of the range</div><div class="t">Bridge</div>

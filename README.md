@@ -64,8 +64,8 @@ logic changes, change `barState()` in the template to match.
 - **Board renders** — `kicad-cli pcb render`, top and `--perspective --rotate "-35,0,25"`.
 - **Photos and screenshots** — `assets/images/r53-shift-light/`, `r53-kline-bridge/`,
   `r53-logger-august/`, `r53-logger-play-store/` in the blog repo.
-- **Google Play badge** — Google's own `en_badge_web_generic.png`. Not on the page while the
-  logger is in Play closed testing, where the listing is "not found" until you join the testers.
+- **Google Play badge** — Google's own `en_badge_web_generic.png`, under the logger since it
+  went public on Play as "R53 Logger Flasher" (2026-11-15). The tester group steps are gone.
 
 ### Rev C product pictures (2026-10-11)
 
