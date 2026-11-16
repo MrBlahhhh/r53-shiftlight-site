@@ -193,6 +193,41 @@
   @media (max-width:560px){ .fit-photos{grid-template-columns:1fr} }
   .polarity{margin-top:22px;padding:16px 20px;border:1px solid rgba(255,176,0,.45);border-left:4px solid var(--a);background:var(--panel);font-size:15px;color:var(--silk2)}
   .polarity b{color:var(--a);font-weight:600}
+  /* terminal callout: Matt's photo of the fitted rev C terminals, a leader line from each screw to
+     what goes in it. Under 900px the lines go and the numbers on the photo match the list. */
+  .termmap{margin:0 0 34px}
+  .tm{position:relative;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(48px,6vw,96px);align-items:center;padding:8px 4px 4px}
+  .tm-legend{position:relative;z-index:2}
+  .tm-group{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--copper);padding-bottom:8px;border-bottom:1px solid var(--line2)}
+  .tm ol{list-style:none;margin:0 0 22px;padding:0}
+  .tm ol:last-child{margin-bottom:0}
+  .tm li{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:12px;row-gap:2px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);cursor:default}
+  .tm li .tm-n{grid-row:1/span 2;align-self:start;margin-top:1px}
+  .tm-n,.tm-pin{display:grid;place-items:center;border-radius:50%;background:#e8323c;color:#fff;font-family:var(--mono);font-weight:700;line-height:1}
+  .tm-n{width:22px;height:22px;font-size:11px}
+  .tm-t{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+  .tm-t b{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--silk);min-width:3.6em}
+  .tm-t .wire{font-family:var(--mono);font-size:13px;color:var(--silk2)}
+  .tm .to{grid-column:2;font-size:14px;line-height:1.4;color:var(--mute)}
+  .tm li.spare .tm-t b,.tm li.spare .wire{color:var(--mute)}
+  .tm-photo{position:relative;z-index:1}
+  .tm-zoom{position:relative}
+  .tm-zoom img{display:block;width:100%;height:auto}
+  .tm-pin{position:absolute;z-index:3;width:clamp(17px,1.9vw,22px);height:clamp(17px,1.9vw,22px);transform:translate(-50%,-50%);font-size:10px;border:2px solid #fff;box-shadow:0 0 0 2px rgba(8,17,12,.6)}
+  .tm-lines{position:absolute;left:0;top:0;z-index:2;pointer-events:none;overflow:visible}
+  .tm-lines .halo{fill:none;stroke:rgba(8,17,12,.8);stroke-width:5;stroke-linejoin:round;stroke-linecap:round}
+  .tm-lines .ln{fill:none;stroke:var(--silk);stroke-width:1.6;stroke-linejoin:round}
+  .tm-lines circle{fill:var(--silk)}
+  .tm li.on .tm-t b{color:var(--a)}
+  .tm li.on .tm-n,.tm-pin.on{background:var(--a);color:var(--ink)}
+  .tm-lines .ln.on{stroke:var(--a);stroke-width:2.4}
+  .tm-lines circle.on{fill:var(--a)}
+  @media (max-width:900px){
+    .tm{grid-template-columns:minmax(0,1fr);gap:22px}
+    .tm-photo{order:-1;overflow:hidden}
+    .tm-zoom{width:165%}
+    .tm-lines{display:none}
+  }
 
   /* fit + faq */
   .fit{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -469,7 +504,8 @@
 <!-- ============ INSTALL ============ -->
 <!-- Rev C bridge fitting, as Matt fits it (2026-11-03): power, ground and CAN on Posi-Taps behind the
      left dash end panel, K-line off OBD2 pins 7 + 8 bridged, AEM gauge on the same CAN taps.
-     Terminal names are rev C's silkscreen: J1 +12 GND GND K CANH CANL, J4 +5V DATA GND. -->
+     Terminal names are rev C's silkscreen: J1 +12V GND GND K CANH CANL (fitted as a 4-way and a
+     2-way XY308 block), J4 +5V DATA GND. -->
 <section class="block" id="install">
   <div class="wrap">
     <div class="head">
@@ -477,19 +513,58 @@
       <h2>Five wires in. Three out to the light.</h2>
       <p class="lede">Power, ground and the CAN pair come from behind the access panel on the left end of the dash, on Posi-Taps like the shift light's. The K-line comes off the back of the OBD2 socket. Nothing gets cut, and the car goes back to standard whenever you like.</p>
     </div>
+    <!-- Pin positions are percentages of the bridge_term crop (pack.py PREP), measured on the
+         screw heads. Re-measure them if the photo or the crop changes. -->
+    <figure class="frame termmap" id="terminals">
+      <div class="tm">
+        <div class="tm-legend">
+          <p class="tm-group">Out to the light · strip harness, comes made up</p>
+          <ol>
+            <li data-pin="1"><span class="tm-n">1</span><span class="tm-t"><b>+5V</b><span class="wire"><i class="sw" style="background:#d81e1e"></i>red</span></span><span class="to">strip power</span></li>
+            <li data-pin="2"><span class="tm-n">2</span><span class="tm-t"><b>DATA</b><span class="wire"><i class="sw" style="background:#f2d21b"></i>yellow</span></span><span class="to">the strip's DIN end</span></li>
+            <li data-pin="3"><span class="tm-n">3</span><span class="tm-t"><b>GND</b><span class="wire"><i class="sw" style="background:#111"></i>black</span></span><span class="to">strip ground</span></li>
+          </ol>
+          <p class="tm-group">In from the car</p>
+          <ol>
+            <li data-pin="4"><span class="tm-n">4</span><span class="tm-t"><b>+12V</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#2f6fe0 50%)"></i>green / blue</span></span><span class="to">switched feed, terminal 15 · X11177 pin 16</span></li>
+            <li data-pin="5"><span class="tm-n">5</span><span class="tm-t"><b>GND</b><span class="wire"><i class="sw" style="background:#7a4a22"></i>brown</span></span><span class="to">ring terminal on the body stud</span></li>
+            <li data-pin="6" class="spare"><span class="tm-n">6</span><span class="tm-t"><b>GND</b><span class="wire">spare</span></span><span class="to">either GND will do; leave one empty</span></li>
+            <li data-pin="7"><span class="tm-n">7</span><span class="tm-t"><b>K</b><span class="wire">one wire</span></span><span class="to">back of the OBD2 socket, pins 7 + 8 bridged</span></li>
+            <li data-pin="8"><span class="tm-n">8</span><span class="tm-t"><b>CANH</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#111 50%)"></i>yellow / black</span></span><span class="to">X11177 pin 11 · the AEM's green shares this tap</span></li>
+            <li data-pin="9"><span class="tm-n">9</span><span class="tm-t"><b>CANL</b><span class="wire"><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#7a4a22 50%)"></i>yellow / brown</span></span><span class="to">X11177 pin 24 · the AEM's brown / white shares this tap</span></li>
+          </ol>
+        </div>
+        <div class="tm-photo">
+          <div class="tm-zoom">
+            <img src="{{ASSET:bridge_term}}" width="1400" height="1175" loading="lazy" alt="The Rev C K-line + CAN board with its screw terminals fitted down the left edge. From the top: a 3-way block, +5V, DATA, GND, for the light; a 4-way block, +12V, GND, GND, K; and a 2-way block, CANH, CANL. The buck module and the XIAO ESP32-S3 sit to the right, USB-C on the right edge.">
+            <span class="tm-pin" data-pin="1" style="left:9.77%;top:17.04%">1</span>
+            <span class="tm-pin" data-pin="2" style="left:9.77%;top:23.10%">2</span>
+            <span class="tm-pin" data-pin="3" style="left:9.66%;top:28.98%">3</span>
+            <span class="tm-pin" data-pin="4" style="left:9.77%;top:43.01%">4</span>
+            <span class="tm-pin" data-pin="5" style="left:10.03%;top:48.89%">5</span>
+            <span class="tm-pin" data-pin="6" style="left:10.03%;top:54.87%">6</span>
+            <span class="tm-pin" data-pin="7" style="left:10.03%;top:60.53%">7</span>
+            <span class="tm-pin" data-pin="8" style="left:9.84%;top:67.70%">8</span>
+            <span class="tm-pin" data-pin="9" style="left:9.96%;top:73.45%">9</span>
+          </div>
+        </div>
+        <svg class="tm-lines" aria-hidden="true"></svg>
+      </div>
+      <figcaption><span>Rev C · what goes in each terminal</span><span>wires go in from the board edge</span></figcaption>
+    </figure>
     <div class="split" style="align-items:start">
       <div>
         <table class="pins wires">
           <thead><tr><th>Terminal</th><th>Wire</th><th>Where</th></tr></thead>
           <tbody>
-            <tr><td>+12</td><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#2f6fe0 50%)"></i>green / blue</td><td>switched 12 V, terminal 15, X11177 pin 16</td></tr>
+            <tr><td>+12V</td><td><i class="sw" style="background:linear-gradient(90deg,#2ca24a 50%,#2f6fe0 50%)"></i>green / blue</td><td>switched 12 V, terminal 15, X11177 pin 16</td></tr>
             <tr><td>GND</td><td><i class="sw" style="background:#7a4a22"></i>brown</td><td>body stud</td></tr>
             <tr><td>K</td><td>one wire</td><td>OBD2 socket, pins 7 and 8 bridged</td></tr>
             <tr><td>CANH</td><td><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#111 50%)"></i>yellow / black</td><td>X11177 pin 11</td></tr>
             <tr><td>CANL</td><td><i class="sw" style="background:linear-gradient(90deg,#f2d21b 50%,#7a4a22 50%)"></i>yellow / brown</td><td>X11177 pin 24</td></tr>
           </tbody>
         </table>
-        <p class="decode" style="margin-top:12px">The harness terminal reads <b>+12 · GND · GND · K · CANH · CANL</b> from the left. Either GND will do. The clamps are 2.54 mm, so use 22–24 AWG wire, not car-gauge.</p>
+        <p class="decode" style="margin-top:12px">The car side is a 4-way block, <b>+12V · GND · GND · K</b>, butted against a 2-way, <b>CANH · CANL</b>. Either GND will do. The clamps are 2.54 mm, so use 22–24 AWG wire, not car-gauge.</p>
       </div>
       <div>
         <table class="pins">
@@ -517,9 +592,13 @@
         <p class="decode" style="margin-top:12px">The X-Series wideband gauge, connector A. CAN low is <b>brown / white</b>. Plain brown is pin 10, the analog output, and isn't CAN. AEM doesn't supply the fuse.</p>
       </div>
     </div>
+    <!-- The asset keys follow the blog's file names, which have the two shots the wrong way round:
+         cantap (install-can-tap.jpg) is the switched-feed tap on the green wire, with the CAN pair's
+         taps below it; powertap (install-power-tap.jpg) is the CAN pair and the body stud. Matt,
+         2026-11-15: "it's the green wire in the middle photo". -->
     <div class="fit-photos">
-      <figure class="frame"><img src="{{ASSET:powertap}}" alt="Posi-Taps on the switched feed behind the left dash end panel, with ring terminals on the body stud" loading="lazy"><figcaption><span>Switched feed</span><span>body stud</span></figcaption></figure>
-      <figure class="frame"><img src="{{ASSET:cantap}}" alt="A Posi-Tap on each wire of the twisted yellow CAN pair in the main harness" loading="lazy"><figcaption><span>The CAN pair</span><span>twisted yellow</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:cantap}}" alt="A Posi-Tap on the green switched-feed wire in the main harness behind the left dash end panel, with the CAN pair's two taps below it" loading="lazy"><figcaption><span>Switched feed</span><span>the green wire</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:powertap}}" alt="A Posi-Tap on each wire of the twisted yellow CAN pair, with ring terminals on the body stud beside them" loading="lazy"><figcaption><span>The CAN pair</span><span>ground on the body stud</span></figcaption></figure>
       <figure class="frame"><img src="{{ASSET:klinetap}}" alt="The back of the OBD2 socket with pins 7 and 8 bridged and one wire taken off to the bridge's K terminal" loading="lazy"><figcaption><span>K-line</span><span>OBD2 pins 7 + 8 bridged</span></figcaption></figure>
     </div>
     <div class="fitting">
@@ -530,7 +609,7 @@
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">2</span><h3>Power and ground</h3></div>
-          <p>Posi-Tap the <b>green / blue</b> switched feed and run it to <b>+12</b>. Ground goes on a ring terminal to the body stud and into either <b>GND</b>.</p>
+          <p>Posi-Tap the <b>green / blue</b> switched feed and run it to <b>+12V</b>. Ground goes on a ring terminal to the body stud and into either <b>GND</b>.</p>
         </div>
         <div class="step">
           <div class="step-head"><span class="step-num">3</span><h3>The CAN pair</h3></div>
@@ -550,7 +629,7 @@
         </div>
       </div>
     </div>
-    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL at the board. At the AEM, green is high and goes with yellow / black, brown / white is low and goes with yellow / brown. Not plain brown: that's the AEM's analog output. +12 on +12, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
+    <div class="polarity"><b>Check polarity before key-on.</b> CAN high to CANH and CAN low to CANL at the board. At the AEM, green is high and goes with yellow / black, brown / white is low and goes with yellow / brown. Not plain brown: that's the AEM's analog output. +12 V on +12V, ground on GND. Buzz each wire before it goes under a screw: the pin number is what counts, and wire colours can differ from car to car.</div>
     <p class="note">The bridge only listens, so a swapped pair on the board just leaves it deaf. The AEM gauge transmits on that bus, so get its pair right the first time.</p>
   </div>
 </section>
@@ -846,5 +925,51 @@
     }
     new IntersectionObserver(function(es){ es.forEach(function(e){ visible = e.isIntersecting; if (visible && !started) start(); }); }, {rootMargin:'200px'}).observe(box);
   })();
+})();
+</script>
+<script>
+/* Terminal callout (#terminals). Its own block so a Three.js failure above can't take it down.
+   Each legend row gets a leader line to its screw on the photo, redrawn whenever the layout
+   moves. Under 900px the CSS hides the SVG and the numbers carry it. */
+(function(){
+  'use strict';
+  const tm = document.querySelector('#terminals .tm');
+  if (!tm) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = tm.querySelector('.tm-lines'), photo = tm.querySelector('.tm-photo');
+  const rows = Array.from(tm.querySelectorAll('li[data-pin]'));
+  const pin = n => photo.querySelector('.tm-pin[data-pin="' + n + '"]');
+  function el(name, attrs){ const e = document.createElementNS(NS, name); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function draw(){
+    svg.replaceChildren();
+    if (getComputedStyle(svg).display === 'none') return;
+    const box = tm.getBoundingClientRect(), ph = photo.getBoundingClientRect();
+    svg.setAttribute('width', box.width); svg.setAttribute('height', box.height);
+    svg.setAttribute('viewBox', '0 0 ' + box.width + ' ' + box.height);
+    const xp = ph.left - box.left;
+    rows.forEach(function(li){
+      const n = li.dataset.pin, p = pin(n).getBoundingClientRect();
+      const name = li.querySelector('.tm-t b').getBoundingClientRect();
+      const x1 = li.getBoundingClientRect().right - box.left + 6, y1 = name.top + name.height / 2 - box.top;
+      // stop at the marker's edge: the SVG sits above the photo, so a line to the centre would cross the number
+      const x2 = p.left - box.left, y2 = p.top + p.height / 2 - box.top;
+      // flat out of the row, one straight run across the gutter, flat into the screw
+      const xa = x1 + (xp - x1) * 0.22, xb = xp - (xp - x1) * 0.18;
+      const d = 'M' + x1 + ',' + y1 + ' H' + xa + ' L' + xb + ',' + y2 + ' H' + x2;
+      svg.append(el('path', {d: d, class: 'halo'}), el('path', {d: d, class: 'ln', 'data-pin': n}),
+                 el('circle', {cx: x1, cy: y1, r: 2.6, 'data-pin': n}));
+    });
+  }
+  function mark(n, on){
+    tm.querySelectorAll('[data-pin="' + n + '"]').forEach(function(e){ e.classList.toggle('on', on); });
+  }
+  tm.querySelectorAll('li[data-pin], .tm-pin').forEach(function(e){
+    e.addEventListener('mouseenter', function(){ mark(e.dataset.pin, true); });
+    e.addEventListener('mouseleave', function(){ mark(e.dataset.pin, false); });
+  });
+  new ResizeObserver(draw).observe(tm);
+  photo.querySelector('img').addEventListener('load', draw);
+  if (document.fonts) document.fonts.ready.then(draw);
+  draw();
 })();
 </script>

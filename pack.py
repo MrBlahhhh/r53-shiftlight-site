@@ -36,6 +36,7 @@ IMAGES = {
     "powertap":    (f"{BLOG}/r53-shift-light/install-power-tap.jpg",     1200, 72, False),
     "cantap":      (f"{BLOG}/r53-shift-light/install-can-tap.jpg",       1200, 72, False),
     "klinetap":    (f"{PHOTOS}/kline-obd-bridge.png",                    1200, 80, False),
+    "bridge_term": (f"{PHOTOS}/kline-can-revc-terminals.jpg",            1400, 82, False),
     "app_thr":     (f"{BLOG}/r53-shift-light/app-thresholds.jpg",         900, 74, False),
     "app_strip":   (f"{BLOG}/r53-shift-light/app-strip.jpg",              900, 74, False),
     "app_graph":   (f"{BLOG}/r53-shift-light/app-graph.jpg",              900, 74, False),
@@ -55,6 +56,11 @@ IMAGES = {
     "br_iso":      (f"{REV_C}/board-iso.png",                          1600, 90, True),
     "play_badge":  (f"{RENDER}/google-play-badge.png",                    646, 90, True),
 }
+# Matt's photo of the fitted terminals (2026-11-15) is shot across the board. A quarter turn
+# anticlockwise makes the silkscreen pin names read left to right with the terminals down the
+# left edge, and the crop keeps the terminals, the buck and the XIAO. The terminal callout in
+# template.html places its pins as percentages of this crop, so changing it moves them.
+PREP = {"bridge_term": lambda im: im.rotate(90, expand=True).crop((380, 700, 3072, 2960))}
 # lossless: a lossy QR may not scan
 PNGS = {"app_qr": f"{BLOG}/r53-shift-light/app-qr.png"}
 MODELS = {"stl": (STL, "stl"), "glb": (f"{RENDER}/shiftlight.glb", "glb")}
@@ -65,6 +71,8 @@ def main():
     out = {}
     for key, (path, maxe, q, alpha) in IMAGES.items():
         im = Image.open(path).convert("RGBA" if alpha else "RGB")
+        if key in PREP:
+            im = PREP[key](im)
         if alpha and im.getbbox():
             im = im.crop(im.getbbox())
         w, h = im.size
