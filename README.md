@@ -87,6 +87,12 @@ It does not convert through STL, which has no material colors.
   K-line Rev C `pictures/board-iso.png` for the supplementary bridge render
   assets. Current Rev D files are not used.
 - `model-renders.json`: records photo/model input hashes and packaged outputs.
+
+`photos/kline-can-revc-terminals.jpg` (2026-11-15) is Matt's photo of the bridge with
+its terminals, buck and XIAO fitted. `pack.py` turns it a quarter turn anticlockwise and
+crops it (`PREP`) into `bridge_term`, the photo under the terminal callout in the install
+section. The callout's pin positions are percentages of that crop, measured on the
+screw heads, so a new crop means re-measuring them.
 - `build.py`: regenerates hosted and inline pages with content-based asset URLs.
 
 ## Hosting
