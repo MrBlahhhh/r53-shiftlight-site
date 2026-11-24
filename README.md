@@ -32,12 +32,16 @@ Edit `template.html`, then:
 ```sh
 python build.py
 # assets first, so the new index.html never names a file the server does not have yet
-rsync -av dist/assets/ deploy@2.25.95.177:/var/www/r53/assets/
-rsync -av dist/index.html deploy@2.25.95.177:/var/www/r53/index.html
+rsync -rtv --chmod=D755,F644 dist/assets/ deploy@2.25.95.177:/var/www/r53/assets/
+rsync -rtv --chmod=D755,F644 dist/index.html deploy@2.25.95.177:/var/www/r53/index.html
 # and the same into the staging copy install.sh deploys from
-rsync -av dist/assets/ deploy@2.25.95.177:r53-site/assets/
-rsync -av dist/index.html deploy@2.25.95.177:r53-site/index.html
+rsync -rtv --chmod=D755,F644 dist/assets/ deploy@2.25.95.177:r53-site/assets/
+rsync -rtv --chmod=D755,F644 dist/index.html deploy@2.25.95.177:r53-site/index.html
 ```
+
+Keep `--chmod=D755,F644` and don't use `-a`: rsync otherwise copies the local file modes, and a
+checkout made under a 077 umask (hermes) is 600, which nginx can't read. That turned the live
+page into a 403 on 2026-11-24 until the modes were set back.
 
 Keep `~/r53-site` on the server current. `deploy/install.sh` runs
 `rsync --delete` from it into `/var/www/r53`, so a stale staging copy puts the old page
