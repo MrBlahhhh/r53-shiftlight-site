@@ -32,7 +32,7 @@ HEAD = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A CAN bus shift light for the 2002–2006 MINI Cooper S (R53): printed housing, assembled light, free companion app, and the K-line + CAN bridge that feeds the R53 Logger · Flasher.">
+<meta name="description" content="A CAN bus shift light for the 2002–2006 MINI Cooper S (R53): printed housing, assembled light, free companion app, and the K-line + CAN bridge that feeds the R53 Logger · Flasher. Now with a tach-side housing for the MINI F56.">
 <meta property="og:title" content="R53 Shift Light">
 <meta property="og:description" content="Eight LEDs on the column shroud, fed by the engine's own CAN bus. Housing, assembled light, free app, and the K-line + CAN bridge.">
 <meta property="og:image" content="https://ryansdesigns.geekopolis.com/shiftlight/assets/installed.webp">

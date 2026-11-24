@@ -55,6 +55,12 @@ IMAGES = {
     "sl_bottom":   (f"{RENDER}/shiftlight_bottom.png",                   1400, 80, True),
     "br_iso":      (f"{REV_C}/board-iso.png",                          1600, 90, True),
     "play_badge":  (f"{RENDER}/google-play-badge.png",                    646, 90, True),
+    # F56 left-tach housing (2026-11-24): Matt's photo of it on his car, cropped, and renders of the
+    # revision 3 STEP from esp32-shift-light-twins hardware/f56-tach-left, as used on the blog
+    "f56_installed": (f"{BLOG}/shift-light/f56-installed.jpg",         1600, 80, False),
+    "f56_close":   (f"{BLOG}/shift-light/f56-installed-close.jpg",       1200, 78, False),
+    "f56_face":    (f"{BLOG}/shift-light/f56-pod-face.jpg",              1200, 86, False),
+    "f56_quarter": (f"{BLOG}/shift-light/f56-pod-three-quarter.jpg",     1200, 86, False),
 }
 # Matt's photo of the fitted terminals (2026-11-15) is shot across the board. A quarter turn
 # anticlockwise makes the silkscreen pin names read left to right with the terminals down the

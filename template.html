@@ -264,7 +264,7 @@
   <div class="wrap">
     <a class="mark" href="#top"><i><b></b><b></b><b></b><b></b></i>RYAN RACING</a>
     <nav>
-      <a href="#housing">Housing</a><a href="#light">Shift light</a><a href="#app">App</a><a href="#logger">Logger</a><a href="#bridge">Bridge</a><a href="#install">Install</a><a href="#pricing">Pricing</a>
+      <a href="#housing">Housing</a><a href="#light">Shift light</a><a href="#app">App</a><a href="#logger">Logger</a><a href="#bridge">Bridge</a><a href="#install">Install</a><a href="#f56">F56</a><a href="#pricing">Pricing</a>
     </nav>
     <a class="btn solid sm" href="#pricing">Order</a>
   </div>
@@ -630,6 +630,74 @@
   </div>
 </section>
 
+<!-- ============ F56 ============ -->
+<!-- MINI F55 / F56 / F57 left-tach housing (added 2026-11-24). Matt, 2026-11-24: sold with the CAN board, same $125 as the R53. f56_installed and f56_close are crops of
+     Matt's photo of it on his car. f56_face and f56_quarter render the revision 3 housing STEP and snap
+     cover from esp32-shift-light-twins hardware/f56-tach-left; the grey arc is that folder's bezel
+     reference rebuilt from the scan circles, and the lit LEDs are drawn in. RPM frame and defaults from
+     cars/cars.json mini-f56; PT-CAN location and colours from PWM_Controller_Canbus PLAN.md. Matt's own
+     F56 runs the strip off the methanol controller. Every order on this page goes to ryan3ddesigns@gmail.com
+     (Matt, 2026-11-24: "All orders go to the Gmail"). $19 follows the R53 housing placeholder. -->
+<section class="block" id="f56">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow">07 · Also for the MINI F55 / F56 / F57</p>
+      <h2>Same eight LEDs. Right on the tach.</h2>
+      <p class="lede">The third-generation MINI carries its cluster on the steering column, so the bar goes on the cluster itself: up the left edge of the tach, with both ends sweeping into the bezel. Needle and bar in one glance, and the wheel rim never gets between you and either.</p>
+    </div>
+    <div class="split">
+      <figure class="frame">
+        <img src="{{ASSET:f56_installed}}" width="1600" height="900" loading="lazy" alt="The printed housing on the left edge of the tach in a MINI F56, eight LED windows running up beside the bezel, with the speedometer to its right">
+        <figcaption><span>Installed · left edge of the tach</span><span>F56 · our car</span></figcaption>
+      </figure>
+      <div>
+        <dl class="spec">
+          <dt>Outer</dt><dd><b>76 × 31 × 14.5 mm</b></dd>
+          <dt>Shape</dt><dd>drawn against a 3D scan of the cluster · sweeps into the bezel over the last 14 mm at each end</dd>
+          <dt>Windows</dt><dd><b>8 separate windows</b>, a rib between each, LEDs flush with the face</dd>
+          <dt>Fits</dt><dd>8 × WS2812B stick, the same one the R53 light uses</dd>
+          <dt>Retention</dt><dd>the snap-on back cover presses the stick into its windows · no glue</dd>
+          <dt>Mount</dt><dd>3M tape to the side of the tach bezel · nothing drilled</dd>
+        </dl>
+        <div class="rule"></div>
+        <dl class="spec">
+          <dt>RPM</dt><dd>PT-CAN id <b>0x0A5</b>, bytes 5–6, ¼ rpm a bit · 500 kbit/s</dd>
+          <dt>Defaults</dt><dd>start <b>4000</b> · colour shift <b>5500</b> · redline and blink <b>6500</b>, where the B38 and B48 run out</dd>
+          <dt>Ships</dt><dd>rev C board set up for the F56, the 8-LED strip and the F56 housing, assembled and tested · same app, same sliders, same Apply and Save</dd>
+        </dl>
+        <div class="rule"></div>
+        <div class="buyrow">
+          <span class="price">$125<small>light + F56 housing · tested</small></span>
+          <span class="price">$19<small>housing only</small></span>
+          <a class="btn solid" href="mailto:ryan3ddesigns@gmail.com?subject=Order%3A%20F56%20shift%20light">Email to order</a>
+        </div>
+      </div>
+    </div>
+    <div class="gallery" style="margin-top:36px">
+      <figure class="frame"><img src="{{ASSET:f56_face}}" loading="lazy" alt="Render of the F56 housing from the driver's seat: eight LED windows, six lit green, both ends sweeping into the curve of the tach bezel"><figcaption><span>Driver's view · filling</span><span>render</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:f56_close}}" loading="lazy" alt="Close-up of the printed housing beside the F56 tach, its eight square LED windows flush with the face"><figcaption><span>Flush windows · ribs between</span><span>F56</span></figcaption></figure>
+      <figure class="frame"><img src="{{ASSET:f56_quarter}}" loading="lazy" alt="Three-quarter render of the F56 housing against the tach bezel, showing the rounded outer edge and the sweep into the ring"><figcaption><span>The sweep into the bezel</span><span>render</span></figcaption></figure>
+    </div>
+    <div class="fitting">
+      <div class="steps">
+        <div class="step">
+          <div class="step-head"><span class="step-num">1</span><h3>Find PT-CAN</h3></div>
+          <p>Not the OBD port: its CAN pair runs to the gateway and carries none of the engine's broadcasts. PT-CAN is a twisted pair under the gear lever, by the steering column and along the right footwell. <b>Blue / red</b> is CAN high, plain <b>red</b> is CAN low. Some cars use black and yellow, so meter it first.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">2</span><h3>Power and CAN</h3></div>
+          <p>Switched 12 V to <b>+12V</b>, ground to <b>GND</b>, and a Posi-Tap on each wire of the pair to <b>CANH</b> and <b>CANL</b>. The termination jumper stays open; the car's bus is already terminated.</p>
+        </div>
+        <div class="step">
+          <div class="step-head"><span class="step-num">3</span><h3>Tape it on</h3></div>
+          <p>Wipe the side of the tach bezel clean, press the housing on with the 3M tape, and run the strip cable down behind the cluster to <b>+5V</b>, <b>DATA</b> and <b>GND</b>. Start the car and blip it.</p>
+        </div>
+      </div>
+    </div>
+    <p class="note">Running our <a href="https://mrblahhhh.github.io/car/tech/2026/10/23/methanol-injection-controller.html" target="_blank" rel="noopener">methanol controller</a> on the F56? It already reads 0x0A5 on PT-CAN and has its own shift light output, which is how the bar in our car runs. It drives this housing too.</p>
+  </div>
+</section>
+
 <!-- ============ PRICING ============ -->
 <section class="block" id="pricing">
   <div class="wrap">
@@ -643,13 +711,14 @@
         <div class="k">Print it</div><div class="t">Housing</div>
         <ul><li class="base">Printed shroud, matte black</li><li class="base">Fits the 8-LED stick, 6.64 mm pitch</li></ul>
         <div class="price">$19</div>
-        <a class="btn ghost" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20shift%20light%20housing">Email to order</a>
+        <a class="btn ghost" href="mailto:ryan3ddesigns@gmail.com?subject=Order%3A%20R53%20shift%20light%20housing">Email to order</a>
       </article>
       <article>
-        <div class="k">Bolt it in</div><div class="t">Shift light</div>
+        <div class="k">Bolt it in · R53 or F56</div><div class="t">Shift light</div>
         <ul><li class="base">Housing</li><li>Carrier rev C, assembled</li><li>ESP32-C3, firmware loaded</li><li>8-LED strip, 12 V harness</li></ul>
         <div class="price">$125</div>
-        <a class="btn ghost" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20shift%20light%2C%20assembled">Email to order</a>
+        <a class="btn ghost" href="mailto:ryan3ddesigns@gmail.com?subject=Order%3A%20R53%20shift%20light%2C%20assembled">R53 · email to order</a>
+        <a class="btn ghost" href="mailto:ryan3ddesigns@gmail.com?subject=Order%3A%20F56%20shift%20light">F56 · email to order</a>
       </article>
       <article>
         <div class="k">Free</div><div class="t">App</div>
@@ -667,10 +736,10 @@
         <div class="k">Top of the range</div><div class="t">Bridge</div>
         <ul><li class="base">Shift light</li><li>K-line transceiver</li><li>CAN listen-only</li><li>Taps in behind the dash, no cutting</li><li>The logger's best input</li></ul>
         <div class="price">$189</div>
-        <a class="btn solid" href="mailto:matt@geekopolis.com?subject=Order%3A%20R53%20K-line%20%2B%20CAN%20bridge">Email to order</a>
+        <a class="btn solid" href="mailto:ryan3ddesigns@gmail.com?subject=Order%3A%20R53%20K-line%20%2B%20CAN%20bridge">Email to order</a>
       </article>
     </div>
-    <p class="note">To order, email <b>matt@geekopolis.com</b> with the item in the subject; the buttons above fill it in. Shift light $125 and the three logger unlocks ($25 app, $50 flash, $50 factory software) are confirmed. Housing and bridge prices are placeholders. Shipping and lead time to be confirmed.</p>
+    <p class="note">To order, email <b>ryan3ddesigns@gmail.com</b> with the item in the subject; the buttons above fill it in. Shift light $125, R53 or F56, and the three logger unlocks ($25 app, $50 flash, $50 factory software) are confirmed. Housing and bridge prices are placeholders. Shipping and lead time to be confirmed.</p>
   </div>
 </section>
 
@@ -691,6 +760,7 @@
       <details><summary>Will it upset the car's CAN bus?</summary><p>No. The node is configured listen-only and never drives a dominant bit, so it cannot acknowledge or disturb the bus. The 120 Ω termination jumper ships open because a vehicle bus is already terminated at both ends.</p></details>
       <details><summary>Why is the iPhone app a web page?</summary><p>Because Safari has never had Web Bluetooth and every iOS browser has to use Safari's engine. Bluefy bridges it. The web app is the same three screens as Android and is free.</p></details>
       <details><summary>Is the flashing safe?</summary><p>It is a flash tool for a twenty-year-old ECU, so treat it that way. The app reads and backs up the stock BIN before any write, recomputes the checksum, and refuses to write if anything else is on the K-line. Off-road and competition use only.</p></details>
+      <details><summary>Does it fit my F56?</summary><p>Yes, and the F55 and F57, which share the cluster. The F56 housing tapes to the left edge of the tach and the board reads RPM off PT-CAN. The <a href="#f56">F56 section</a> has the fit and the wiring.</p></details>
       <details><summary>Not AWS Route 53?</summary><p>Not AWS Route 53. R53 is the chassis code.</p></details>
     </div>
   </div>
